@@ -120,7 +120,7 @@ namespace RepositoryLayer.Interface
         /// <param name="Noteid">The noteid.</param>
         /// <param name="senderId">The sender identifier.</param>
         /// <returns>senderId</returns>
-        Task<bool> Collabrate(int Noteid, IList<string> senderId);
+        Task<bool> Collabrate(int Noteid, IList<string> senderId, int CurrentUser);
 
         /// <summary>
         /// Bulks the trash.

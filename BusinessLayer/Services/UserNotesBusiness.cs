@@ -402,13 +402,13 @@ namespace BusinessLayer.Services
         /// NoteId
         /// </returns>
         /// <exception cref="Exception">Unable to collabrate note</exception>
-        public async Task<bool> Collabrate(int Noteid, IList<string> senderId)
+        public async Task<bool> Collabrate(int Noteid, IList<string> senderId, int CurrentUser)
         {
             try
             {             
                 if(senderId != null)
                 {
-                    return await this._notesRepository.Collabrate(Noteid, senderId);
+                    return await this._notesRepository.Collabrate(Noteid, senderId,CurrentUser);
                 }
                 else
                 {

@@ -119,7 +119,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="collabrationModel">The collabration model.</param>
         /// <returns>NoteId</returns>
-        Task<bool> Collabrate(int Noteid, IList<string> senderId);
+        Task<bool> Collabrate(int Noteid, IList<string> senderId, int CurrentUser);
 
         Task<bool> BulkTrash(IList<int> id);
        //// IList<NotesModel> Search(string anything);

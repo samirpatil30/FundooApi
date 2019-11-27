@@ -13,6 +13,9 @@ namespace RepositoryLayer.Services
     using CommanLayer.Model;
     using RepositoryLayer.Context;
     using RepositoryLayer.Interface;
+    using System.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
+    using System.Data;
 
     /// <summary>
     /// LabelRepositoryManager
@@ -20,6 +23,7 @@ namespace RepositoryLayer.Services
     /// <seealso cref="RepositoryLayer.Interface.ILabelRepositoryManager" />
     public class LabelRepositoryManager : ILabelRepositoryManager
     {
+        private readonly IConfiguration _configuration;
         /// <summary>
         /// Create the Reference Variable of AuthenticationContext  
         /// </summary>
@@ -29,9 +33,10 @@ namespace RepositoryLayer.Services
         /// LabelRepositoryManager
         /// </summary>
         /// <param name="authenticationContext"></param>
-        public LabelRepositoryManager(AuthenticationContext authenticationContext)
+        public LabelRepositoryManager(AuthenticationContext authenticationContext, IConfiguration configuration)
         {
             _authenticationContext = authenticationContext;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -41,28 +46,34 @@ namespace RepositoryLayer.Services
         /// <returns>result</returns>
         public async Task<bool> AddLabel(LabelModel labelModel)
         {
-            //// variable addLabel stores the below data
-            var addLabel = new LabelModel()
+            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            try
             {
-                Id = labelModel.Id,
-                UserId = labelModel.UserId,
-                Label = labelModel.Label,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-            };
-           
-            //// Add the details of user in db
-            this._authenticationContext.Add(addLabel);
-            //// save the the details in db and return a result
-            var result = await this._authenticationContext.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                return true;
+                SqlCommand sqlcommand = new SqlCommand();
+                sqlcommand = new SqlCommand("SPAddLabel", con);
+                sqlcommand.CommandType = CommandType.StoredProcedure;
+                sqlcommand.Parameters.AddWithValue("@UserId", labelModel.UserId);
+                sqlcommand.Parameters.AddWithValue("@Label", labelModel.Label);
+                sqlcommand.Parameters.AddWithValue("@CreatedDate", DateTime.UtcNow);
+                sqlcommand.Parameters.AddWithValue("@ModifiedDate", DateTime.UtcNow); 
+                con.Open();
+                int row = await sqlcommand.ExecuteNonQueryAsync();
+                if (row > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception e)
             {
-                return false;
+                throw e;
+            }
+            finally
+            {
+                con.Close();
             }
         }
 

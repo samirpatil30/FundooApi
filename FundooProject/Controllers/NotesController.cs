@@ -222,9 +222,9 @@ namespace FundooProject.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("CollabrateNotes")]
-        public async Task<IActionResult> Collabrate(int Noteid, IList<string> senderId)
+        public async Task<IActionResult> Collabrate(int Noteid, IList<string> senderId, int CurrentUser)
         {
-            var result = await this._userNotes.Collabrate(Noteid, senderId);
+            var result = await this._userNotes.Collabrate(Noteid, senderId, CurrentUser);
             return this.Ok(new { result }); 
         }
 

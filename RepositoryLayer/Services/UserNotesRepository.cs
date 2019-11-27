@@ -104,7 +104,6 @@ namespace RepositoryLayer.Services
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.Parameters.AddWithValue("UserId", userId);
             SqlDataReader dataReader = sqlCommand.ExecuteReader();
-           
             while(dataReader.Read())
             {
                 var notesModel = new NotesModel()
@@ -121,7 +120,6 @@ namespace RepositoryLayer.Services
                    Archive = Convert.ToBoolean(dataReader["Archive"]),
                    Pin = Convert.ToBoolean(dataReader["Pin"])
                 };
-
                 list.Add(notesModel);
             }
 
@@ -457,24 +455,23 @@ namespace RepositoryLayer.Services
         /// <param name="Noteid">The noteid.</param>
         /// <param name="UserId">The user identifier.</param>
         /// <returns>list of user id</returns>
-        public async Task<bool> Collabrate(int Noteid, IList<string> UserId)
+        public async Task<bool> Collabrate(int Noteid, IList<string> UserId,int CurrentUser)
         {
             try
             {
-                var ListOFSenders = (from notes in _authenticationContext.notesModels
-                                     where notes.Id == Noteid
-                                     select notes).FirstOrDefault();
-
-                foreach (var User in UserId)
+                SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                
+                foreach(var user in UserId)
                 {
-                    var list = new CollabrationModel();
-                    list.UserId = User;
-                    list.NoteId = Noteid;
-                    list.CurrentUserId = ListOFSenders.UserId;
-                    this._authenticationContext.Add(list);
-                    var result = await this._authenticationContext.SaveChangesAsync();
+                   SqlCommand sqlCommand = new SqlCommand("SPCollabration", con);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    sqlCommand.Parameters.AddWithValue("@Id", Noteid);
+                    sqlCommand.Parameters.AddWithValue("@UserId", CurrentUser);
+                    sqlCommand.Parameters.AddWithValue("@ReciverId", user);
+                    await sqlCommand.ExecuteNonQueryAsync();
+                    con.Close();
                 }
-
                 return true;
             }
             catch (Exception exception)
