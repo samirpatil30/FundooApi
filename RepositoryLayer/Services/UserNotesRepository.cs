@@ -60,10 +60,10 @@ namespace RepositoryLayer.Services
                 sqlcommand.Parameters.AddWithValue("@UserId", notesModel.UserId);
                 sqlcommand.Parameters.AddWithValue("@NotesTitle", notesModel.NotesTitle);
                 sqlcommand.Parameters.AddWithValue("@NotesDescription", notesModel.NotesDescription);
-                sqlcommand.Parameters.AddWithValue("@CreatedDate", notesModel.CreatedDate);
-                sqlcommand.Parameters.AddWithValue("@ModifiedDate", notesModel.ModifiedDate);
+                // sqlcommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
+                //sqlcommand.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                 sqlcommand.Parameters.AddWithValue("@color", notesModel.color);
-                sqlcommand.Parameters.AddWithValue("@Reminder", notesModel.Reminder);
+                sqlcommand.Parameters.AddWithValue("@Reminder", SqlDateTime.Null);
                 sqlcommand.Parameters.AddWithValue("@Image", notesModel.Image);
                 sqlcommand.Parameters.AddWithValue("@Trash", notesModel.Trash);
                 sqlcommand.Parameters.AddWithValue("@Archive", notesModel.Archive);
@@ -97,7 +97,7 @@ namespace RepositoryLayer.Services
         /// <returns>UserID</returns>
         public IList<NotesModel> GetNotes(int userId,int pageNumber, int NotePerPage)
         {
-            IList<NotesModel> list = new List<NotesModel>(); ;
+            IList<NotesModel> list = new List<NotesModel>(); 
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
             SqlCommand sqlCommand = new SqlCommand("SpGetNotes", con);
             con.Open();
@@ -108,7 +108,7 @@ namespace RepositoryLayer.Services
             {
                 var notesModel = new NotesModel()
                 { 
-                   UserId = userId.ToString(),
+                   UserId = userId,
                    NotesTitle = dataReader["NotesTitle"].ToString(),
                    NotesDescription = dataReader["NotesDescription"].ToString(),
                    CreatedDate = Convert.ToDateTime(dataReader["CreatedDate"]),
@@ -488,7 +488,7 @@ namespace RepositoryLayer.Services
         public async Task<bool> BulkTrash(IList<int> id)
         {
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-
+ 
             foreach(var CurrentId in id)
             {
                 SqlCommand sqlCommand = new SqlCommand("DeleteNotes", con);
@@ -503,59 +503,45 @@ namespace RepositoryLayer.Services
             
         }
 
-        /// <summary>
-        /// Searches the specified anything.
-        /// </summary>
-        /// <param name="anything">Anything.</param>
-        /// <returns>string</returns>
-        /// <exception cref="Exception">Note not found</exception>
-        //public IList<NotesModel> Search(string anything)
-        //{
-        //    IList<NotesModel> listResults = new List<NotesModel>();
-        //    try
-        //    {
-        //        var resultsFromLabel = (from lable in this._authenticationContext.labelModels
-        //                                where lable.Label == anything
-        //                                select lable);
-                
-        //        if (resultsFromLabel != null)
-        //        {
-        //            foreach (LabelModel model in resultsFromLabel)
-        //            {
-        //                var result = (from note in _authenticationContext.notesModels
-        //                              where note.UserId == model.UserId 
-        //                              select note);
+        public IList<NotesModel> Search(string word, int UserId)
+        {
 
-        //                ////  NotesModel notesModel =(NotesModel) res;
-        //                foreach (NotesModel modelNote in result)
-        //                {
-        //                    if (listResults.Contains(modelNote))
-        //                    {
-        //                        break;
-        //                    }
-        //                    else
-        //                    {
-        //                       listResults.Add(modelNote);                              
-        //                    }
-        //                }
-        //            }
-        //            return listResults.ToList();
-        //        }
+            try
+            {
+                IList<NotesModel> notesModel = new List<NotesModel>();
+                SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPNoteSearch", con);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                con.Open();
+                sqlCommand.Parameters.AddWithValue("@UserId", UserId);
+                sqlCommand.Parameters.AddWithValue("@word", word);
+                SqlDataReader reader = sqlCommand.ExecuteReader();
 
-        //        var resultsFromNotes = (from note in _authenticationContext.notesModels
-        //                                select note);
+                while (reader.Read())
+                {
+                    ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+                    NotesModel userList = new NotesModel();
+                    userList.Id = Convert.ToInt32(reader["Id"]);
+                    userList.UserId = Convert.ToInt32(reader["UserId"].ToString());
+                    userList.Image = reader["Image"].ToString();
+                    userList.Archive = (bool)reader["Archive"];
+                    userList.Pin = Convert.ToBoolean(reader["Pin"].ToString());
+                    userList.Trash = Convert.ToBoolean(reader["Trash"].ToString());
+                    userList.ModifiedDate = Convert.ToDateTime(reader["ModifiedDate"].ToString());
+                    userList.CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString());
+                    userList.color = reader["color"].ToString();
+                    userList.NotesDescription = reader["NotesDescription"].ToString();
+                    userList.Reminder = Convert.ToDateTime(reader["Reminder"].ToString());
+                    userList.NotesTitle = reader["NotesTitle"].ToString();
+                    notesModel.Add(userList);
+                }
+                return notesModel;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
 
-        //        var lastItem = (from note in _authenticationContext.notesModels
-        //                        select note).Last();
-        //        //else
-        //        //{
-        //        //    throw new Exception("Note not found");
-        //        //}
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw exception;
-        //    }
-        //}
+        }
     }
 }

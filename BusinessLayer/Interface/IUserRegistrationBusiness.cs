@@ -44,7 +44,7 @@ namespace BusinessLayer.Interface
         /// <param name="resetPasswordModel">The reset password model.</param>
         /// <param name="tokenString">The token string.</param>
         /// <returns>resetPasswordModel,tokenString </returns>
-        Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel, string tokenString);
+        Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel);
 
         /// <summary>
         /// Profiles the picture.
@@ -52,7 +52,7 @@ namespace BusinessLayer.Interface
         /// <param name="userid">The user id.</param>
         /// <param name="file">The file.</param>
         /// <returns>User id, file</returns>
-        string ProfilePicture(string userid, IFormFile file);
+        Task<string> ProfilePicture( int userid, IFormFile file);
 
         /// <summary>
         /// Admin registration.

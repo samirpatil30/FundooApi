@@ -16,6 +16,7 @@ namespace RepositoryLayer.Services
     using System.Data.SqlClient;
     using Microsoft.Extensions.Configuration;
     using System.Data;
+    using System.Data.SqlTypes;
 
     /// <summary>
     /// LabelRepositoryManager
@@ -44,20 +45,29 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="labelModel">labelModel</param>
         /// <returns>result</returns>
-        public async Task<bool> AddLabel(LabelModel labelModel)
+        public async Task<bool> AddLabel(int noteId,int UserId, List<string> labelName)
         {
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
             try
             {
                 SqlCommand sqlcommand = new SqlCommand();
-                sqlcommand = new SqlCommand("SPAddLabel", con);
-                sqlcommand.CommandType = CommandType.StoredProcedure;
-                sqlcommand.Parameters.AddWithValue("@UserId", labelModel.UserId);
-                sqlcommand.Parameters.AddWithValue("@Label", labelModel.Label);
-                sqlcommand.Parameters.AddWithValue("@CreatedDate", DateTime.UtcNow);
-                sqlcommand.Parameters.AddWithValue("@ModifiedDate", DateTime.UtcNow); 
-                con.Open();
-                int row = await sqlcommand.ExecuteNonQueryAsync();
+               
+                //con.Open();
+                int row = 0;
+                foreach (var label in labelName)
+                {
+                    sqlcommand = new SqlCommand("SPAddLabel", con);
+                    sqlcommand.CommandType = CommandType.StoredProcedure;  
+                    sqlcommand.Parameters.AddWithValue("@UserId", UserId);
+                    sqlcommand.Parameters.AddWithValue("@noteId", noteId);
+                    sqlcommand.Parameters.AddWithValue("@Label", label);
+                    //sqlcommand.Parameters.AddWithValue("@CreatedDate", DateTime.UtcNow);
+                    //qlcommand.Parameters.AddWithValue("@ModifiedDate", DateTime.UtcNow);
+                    con.Open();
+                     row= await sqlcommand.ExecuteNonQueryAsync();
+                    con.Close();
+                }
+                
                 if (row > 0)
                 {
                     return true;
@@ -83,41 +93,92 @@ namespace RepositoryLayer.Services
         /// <param name="labelModelDetails"></param>
         /// <param name="labelName">labelName</param>
         /// <returns>result</returns>
-        public async Task<bool> UpdateLabel(LabelModel labelModelDetails, string labelName)
+        public async Task<bool> UpdateLabel(int noteId, int UserId, int labelId, string labelName)
         {
-            //// variable updateLabel store the Information of user like labelName
-            var Updatelabel = from label in this._authenticationContext.labelModels
-                             where label.Label == labelName
-                              select label;
+            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            try
+            {
+                SqlCommand sqlcommand = new SqlCommand("UpdateLabel", con);
+                    sqlcommand.CommandType = CommandType.StoredProcedure;
+                    sqlcommand.Parameters.AddWithValue("@UserId", UserId);
+                sqlcommand.Parameters.AddWithValue("@noteId", noteId);
+                sqlcommand.Parameters.AddWithValue("@Label", labelName);
+                    sqlcommand.Parameters.AddWithValue("@LabelId", labelId);
+                    con.Open();
+                    int row = await sqlcommand.ExecuteNonQueryAsync();
+                    con.Close();
 
-            ////if notes data have records then it will update the records
-            foreach (var label in Updatelabel)
-            {
-                label.Label = labelModelDetails.Label;
-            }
-            ////save changes to the database
-            var result = await this._authenticationContext.SaveChangesAsync();
+                
+                if (row > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
 
-            if (result > 0)
-            {
-                return true;
             }
-            else
+            catch (Exception exception)
             {
-                return false;
+                throw exception;
             }
         }
+
 
         /// <summary>
         /// Get Label
         /// </summary>
         /// <param name="userId">userId</param>
         /// <returns>list</returns>
-        public IList<LabelModel> GetLabel(string userId)
+        public IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage)
         {
-            //// Here the Linq querey return the Record match in Database
-            var list = from label in this._authenticationContext.labelModels.Where(g => g.UserId == userId) select label;
-            return list.ToList();
+            try
+            {
+                IList<LabelModel> list = new List<LabelModel>();
+                SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPGetLabel", con);
+                con.Open();
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("UserId", userId);
+                SqlDataReader dataReader = sqlCommand.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    var labelModel = new LabelModel()
+                    {
+                        UserId = userId,
+                        Label = Convert.ToString(dataReader["Label"]),
+                        CreatedDate = Convert.ToDateTime(dataReader["CreatedDate"]),
+                        ModifiedDate = Convert.ToDateTime(dataReader["ModifiedDate"]),
+                    };
+                    list.Add(labelModel);
+                }
+
+                //// Here the Linq querey return the Record match in Database
+
+                int count = list.Count();
+                int CurrentPage = pageNumber;
+                int PageSize = LabelPerPage;
+                int TotalCount = count;
+
+                // Calculating Totalpage by Dividing (No of Records / Pagesize)  
+                int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
+                var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+
+                var paginationMetadata = new
+                {
+                    totalCount = TotalCount,
+                    pageSize = PageSize,
+                    currentPage = CurrentPage,
+                    totalPages = TotalPages,
+                };
+
+                return items.ToList();
+            }
+            catch(Exception exception)
+            {
+                throw exception;
+            }
         }
 
         /// <summary>
@@ -126,23 +187,24 @@ namespace RepositoryLayer.Services
         /// <param name="labelModel"></param>
         /// <param name="id">id</param>
         /// <returns>labelModel</returns>
-        public async Task<bool> DeleteLabel(LabelModel labelModel, int id)
+        public async Task<bool> DeleteLabel(int id)
         {
-            //// deleteLabelDetails stores the result of below Linq query
-                var deleteLabelDetails =
-                from details in this._authenticationContext.labelModels
-                where details.Id == id && details.UserId == labelModel.UserId
-                select details;
-
-            foreach (var deleteLabel in deleteLabelDetails)
+            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCommand = new SqlCommand("SPDeleteLabel", con);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@LabelId",id);
+            con.Open();
+            
+            int row = await sqlCommand.ExecuteNonQueryAsync();
+            con.Close();
+            if (row > 0)
             {
-                //// remove the record from database
-                this._authenticationContext.Remove(deleteLabel);
+                return true;
             }
-
-            ////save changes to the database
-            var result = await this._authenticationContext.SaveChangesAsync();
-            return true;
+            else
+            {
+                return false;
+            }
         }
     }
 }

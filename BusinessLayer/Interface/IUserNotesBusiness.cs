@@ -122,6 +122,7 @@ namespace BusinessLayer.Interface
         Task<bool> Collabrate(int Noteid, IList<string> senderId, int CurrentUser);
 
         Task<bool> BulkTrash(IList<int> id);
-       //// IList<NotesModel> Search(string anything);
+
+        IList<NotesModel> Search(string word, int UserId);
     }
 }

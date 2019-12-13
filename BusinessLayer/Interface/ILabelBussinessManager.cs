@@ -20,7 +20,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="labelModel">label Model</param>
         /// <returns>result</returns>
-        Task<bool> AddLabel(LabelModel labelModel);
+        Task<bool> AddLabel(int NoteId,int UserId, List<string> labelName);
 
         /// <summary>
         /// Update Label
@@ -28,14 +28,14 @@ namespace BusinessLayer.Interface
         /// <param name="labelModelDetails">label Model Details</param>
         /// <param name="labelName">labelName</param>
         /// <returns>result</returns>
-        Task<bool> UpdateLabel(LabelModel labelModelDetails, string labelName);
+        Task<bool> UpdateLabel(int noteId,int UserId, int labelId, string labelName);
 
         /// <summary>
         /// Get Label
         /// </summary>
         /// <param name="userId">user Id</param>
         /// <returns>result</returns>
-        IList<LabelModel> GetLabel(string userId);
+        IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage);
 
         /// <summary>
         /// Delete Label
@@ -43,6 +43,6 @@ namespace BusinessLayer.Interface
         /// <param name="labelModel">labelModel</param>
         /// <param name="id">id</param>
         /// <returns>result</returns>
-        Task<bool> DeleteLabel(LabelModel labelModel, int id);
+        Task<bool> DeleteLabel(int id);
     }
 }

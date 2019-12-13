@@ -125,7 +125,7 @@ namespace BusinessLayer.Services
                 //// if checks the notesModel is Null or not
                 if (id != 0)
                 {
-                    var result = await this._notesRepository.DeleteNotes(id);
+                    var result = await  this._notesRepository.DeleteNotes(id);
                     return result;
                 }
                 else
@@ -447,6 +447,27 @@ namespace BusinessLayer.Services
             }
         }
 
+        public IList<NotesModel> Search(string word, int UserId)
+        {
+            try
+            {
+                if(UserId > 0)
+                {
+                    return _notesRepository.Search(word, UserId);
+                }
+                else
+                {
+                    throw new Exception("Unable to search notes");
+                }                
+            }
+            catch(Exception exception)
+            {
+                throw exception;
+            }
+            
+            //throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Searches the specified note.
         /// </summary>
@@ -458,7 +479,7 @@ namespace BusinessLayer.Services
         //    try
         //    {
         //       return this._notesRepository.Search(note);
-             
+
         //    }
         //    catch (Exception exception)
         //    {

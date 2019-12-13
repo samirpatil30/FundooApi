@@ -28,7 +28,7 @@ namespace CommanLayer.Model
             Account myAccount = new Account("mypersonalimagecloud", "195418184769875", "KsBsYEpjmd2RJ-B11TIAtlEOots");
 
             //// Create the instance of Cloudinary
-            Cloudinary _cloudinary = new Cloudinary(myAccount);
+            Cloudinary _cloudinary = new Cloudinary(myAccount);   
             var stream = file.OpenReadStream();
             var uploadParams = new ImageUploadParams()
             {

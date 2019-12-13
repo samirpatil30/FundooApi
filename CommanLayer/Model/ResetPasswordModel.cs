@@ -18,5 +18,6 @@ namespace CommanLayer.Model
         /// The Password.
         /// </value>
         public string Password { get; set; }
+        public string token { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace CommanLayer.Model
         /// The UserId
         /// </value>
         [ForeignKey("UserDetails")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the NotesTitle.
@@ -63,7 +63,7 @@ namespace CommanLayer.Model
         /// <value>
         /// The ModifiedDate of the notes.
         /// </value>
-        public DateTime? ModifiedDate { get; set; }
+       public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the Color.
@@ -71,7 +71,7 @@ namespace CommanLayer.Model
         /// <value>
         /// The Color of the Notes.
         /// </value>        
-        [Required]
+  
         [RegularExpression("^#(?:[0-9a-fA-F]{3}){1,2}$")]
         public string color { get; set; }
 

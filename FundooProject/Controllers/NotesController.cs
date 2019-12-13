@@ -8,10 +8,12 @@ namespace FundooProject.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using BusinessLayer.Interface;
     using CommanLayer.Model;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +21,10 @@ namespace FundooProject.Controllers
     /// NotesController
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [EnableCors("CorsPolicy")]
+    [Authorize]
     [Route("api/[controller]")]
-    ////[ApiController]
+    [ApiController]
     ////Authorize attribute to the controller class, then any action methods on the controller will be only available to authenticated users. 
     [Authorize]
     public class NotesController : ControllerBase
@@ -45,9 +49,11 @@ namespace FundooProject.Controllers
         /// <param name="notesModel">The notes model.</param>
         /// <returns>result</returns>
         [HttpPost]
+        [AllowAnonymous]
         ////[//Route("AddNotes")]
         public async Task<IActionResult> AddNotes(NotesModel notesModel)
         {
+            notesModel.UserId = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == "Id").Value);
             var result = await this._userNotes.AddNotes(notesModel);
             return this.Ok(new { result });
         }
@@ -246,12 +252,12 @@ namespace FundooProject.Controllers
         /// </summary>
         /// <param name="notes">The notes.</param>
         ///// <returns></returns>
-        //[HttpGet]
-        //[Route("search")]
-        //public IList<NotesModel> Search(string notes)
-        //{
-        //    var result = this._userNotes.Search(notes);
-        //    return result;
-        //}
+        [HttpGet]
+        [Route("search")]
+        public IList<NotesModel> Search(string word, int UserId)
+        {
+            var result = this._userNotes.Search(word,UserId);
+            return result;
+        }
     }
 }

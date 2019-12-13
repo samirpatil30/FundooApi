@@ -20,7 +20,7 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="labelModel">The label model.</param>
         /// <returns></returns>
-        Task<bool> AddLabel(LabelModel labelModel);
+        Task<bool> AddLabel(int noteId,int UserId, List<string> labelName);
 
         /// <summary>
         /// Updates the label.
@@ -28,14 +28,14 @@ namespace RepositoryLayer.Interface
         /// <param name="labelModel">The label model.</param>
         /// <param name="label">The label.</param>
         /// <returns></returns>
-        Task<bool> UpdateLabel(LabelModel labelModel, string label);
+        Task<bool> UpdateLabel(int noteId,int UserId, int labelId, string labelName);
 
         /// <summary>
         /// Gets the label.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>userId</returns>
-        IList<LabelModel> GetLabel(string userId);
+        IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage);
 
         /// <summary>
         /// Deletes the label.
@@ -43,6 +43,6 @@ namespace RepositoryLayer.Interface
         /// <param name="labelModel">The label model.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>labelModel</returns>
-        Task<bool> DeleteLabel(LabelModel labelModel, int id);
+        Task<bool> DeleteLabel( int id);
     }
 }

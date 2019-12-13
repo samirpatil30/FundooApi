@@ -129,11 +129,6 @@ namespace RepositoryLayer.Interface
         /// <returns>id</returns>
         Task<bool> BulkTrash(IList<int> id);
 
-        /// <summary>
-        /// Searches the specified anything.
-        /// </summary>
-        /// <param name="anything">Anything.</param>
-        /// <returns>string</returns>
-       //// IList<NotesModel> Search(string anything);
+        IList<NotesModel> Search(string word, int UserId);
     }
 }

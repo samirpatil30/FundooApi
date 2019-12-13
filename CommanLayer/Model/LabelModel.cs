@@ -30,8 +30,7 @@ namespace CommanLayer.Model
         /// The user identifier.
         /// </value>
         [Required]
-        [ForeignKey("UserDetails")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the label.
@@ -49,11 +48,11 @@ namespace CommanLayer.Model
         /// <value>
         /// The created date.
         /// </value>
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// ModifiedDate
         /// </summary>
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace FundoTestProject.Account
                 UserName = "UserName",
                 Email = "Email",
                 Password = "Password",
-                ProfilePicuture = "ProfilePicuture"
+                ProfilePicture = "ProfilePicuture"
             };
 
             ////Act
@@ -52,7 +52,7 @@ namespace FundoTestProject.Account
             var businessLayer = new UserRegistrationService(Repository.Object);
             var model = new LoginModel()
             {
-                UserName = "userName",
+                Email = "userName",
                 Password = "Password"
             };
 
@@ -121,7 +121,7 @@ namespace FundoTestProject.Account
             var Business = new UserRegistrationService(Repository.Object);
             var model = new LoginModel()
             {                
-                UserName = "manoj123",                
+                Email = "manoj123",                
                 Password = "manoj123",
              };
 

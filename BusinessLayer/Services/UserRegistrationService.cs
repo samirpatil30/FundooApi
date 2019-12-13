@@ -128,7 +128,7 @@ namespace BusinessLayer.Services
         /// <param name="tokenString">token string.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">User Email is not valid</exception>
-        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel, string tokenString)
+        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace BusinessLayer.Services
                 if (resetPasswordModel != null)
                 {
                     //// variable result stores the result of ResetPassword()
-                   var result = await this._registration.ResetPassword(resetPasswordModel, tokenString);
+                   var result = await this._registration.ResetPassword(resetPasswordModel);
 
                     //// If checks result is null or not
                     if (result != null)
@@ -165,19 +165,19 @@ namespace BusinessLayer.Services
         /// <param name="user id">user id.</param>
         /// <param name="file">file.</param>
         /// <returns> this._registration.ProfilePicture(profilePicUrl, user id, file);</returns>
-        public string ProfilePicture(string userid, IFormFile file)
+        public Task<string> ProfilePicture(int userid, IFormFile file)
         {
             try
             {
-                CloudinaryImageUpload cloudinary = new CloudinaryImageUpload();
-                var profilePicUrl = cloudinary.UploadImageOnCloud(file);
-                if (userid != null)
+                //CloudinaryImageUpload cloudinary = new CloudinaryImageUpload();
+                //var profilePicUrl = cloudinary.UploadImageOnCloud(file);
+                if (userid > 0)
                 {
-                    return this._registration.ProfilePicture(profilePicUrl, userid, file);
+                    return this._registration.ProfilePicture( userid, file);
                 }
                 else
                 {
-                    return "Profile Picture is not uploaded";                   
+                    throw new  Exception("Profile Picture is not uploaded");                   
                 }
             }
             catch (Exception exception)

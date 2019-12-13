@@ -37,14 +37,14 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="labelModel">label Model</param>
         /// <returns></returns>
-        public async Task<bool> AddLabel(LabelModel labelModel)
+        public async Task<bool> AddLabel(int NoteId, int UserId, List<string> labelName)
         {
             try
             {
                 //// Here checked labelModel contains information or not 
-                if (labelModel != null)
+                if (UserId != 0)
                 {
-                    return await this._repositoryManager.AddLabel(labelModel);
+                    return await this._repositoryManager.AddLabel(NoteId,UserId, labelName);
                 }
                 else
                 {
@@ -63,14 +63,14 @@ namespace BusinessLayer.Services
         /// <param name="labelModelDetails">label Model Details</param>
         /// <param name="labelName">label Name</param>
         /// <returns> this._repositoryManager.UpdateLabel(labelModelDetails, labelName);</returns>
-        public async Task<bool> UpdateLabel(LabelModel labelModelDetails, string labelName)
+        public async Task<bool> UpdateLabel(int noteId,int UserId, int labelId, string labelName)
         {
             try
             {
                 //// Here checked labelModelDetails contains information or not 
-                if (labelModelDetails != null)
+                if (UserId > 0)
                 {
-                    return await this._repositoryManager.UpdateLabel(labelModelDetails, labelName);
+                    return await this._repositoryManager.UpdateLabel(noteId,UserId, labelId, labelName);
                 }
                 else
                 {
@@ -88,14 +88,14 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>userId</returns>
-        public IList<LabelModel> GetLabel(string userId)
+        public IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage)
         {
             try
             {
                 //// Here checked userId contains information or not 
-                if (userId != null)
+                if (userId > 0)
                 {
-                   var result = this._repositoryManager.GetLabel(userId);
+                   var result = this._repositoryManager.GetLabel(userId, pageNumber, LabelPerPage);
                     return result;
                    
                 }
@@ -116,15 +116,15 @@ namespace BusinessLayer.Services
         /// <param name="labelModel">labelModel</param>
         /// <param name="id">id</param>
         /// <returns>result</returns>
-        public async Task<bool> DeleteLabel(LabelModel labelModel, int id)
+        public async Task<bool> DeleteLabel(int id)
         {
             try
             {
                 //// Here checked labelModel contains information or not 
-                if (labelModel != null)
+                if (id > 0)
                 {
                     //// variable result store the result of DeleteLabel()  
-                    var result = await this._repositoryManager.DeleteLabel(labelModel, id);
+                    var result = await this._repositoryManager.DeleteLabel(id);
                     return result;
                 }
                 else

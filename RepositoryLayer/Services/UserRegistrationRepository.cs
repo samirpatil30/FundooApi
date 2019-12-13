@@ -39,6 +39,7 @@ namespace RepositoryLayer.Services
         /// AuthenticationContext
         /// </summary>
         AuthenticationContext _authenticationContext;
+        private UserDetails userTypeData;
 
         /// <summary>
         /// Create the parameterized Constructor of class and pass the UserManager
@@ -66,8 +67,8 @@ namespace RepositoryLayer.Services
                 sqlcommand.CommandType = CommandType.StoredProcedure;
                 sqlcommand.Parameters.AddWithValue("@FirstName", userDetail.FirstName);
                 sqlcommand.Parameters.AddWithValue("@LastName", userDetail.LastName);
-                sqlcommand.Parameters.AddWithValue("@UserName", userDetail.UserName);
-                sqlcommand.Parameters.AddWithValue("@Email", userDetail.Email);
+                sqlcommand.Parameters.AddWithValue("@UserName", userDetail.UserName );
+                sqlcommand.Parameters.AddWithValue("@Email", userDetail.UserName + "@gmail.com");
                 sqlcommand.Parameters.AddWithValue("@Password", userDetail.Password);
                 sqlcommand.Parameters.AddWithValue("@ProfilePicture", userDetail.ProfilePicture);
                 sqlcommand.Parameters.AddWithValue("@UserType", userDetail.UserType);
@@ -77,6 +78,7 @@ namespace RepositoryLayer.Services
                 if (row > 0)
                 {
                     return true;
+                    
                 }
                 else
                 {
@@ -106,20 +108,21 @@ namespace RepositoryLayer.Services
             SqlCommand sqlCommand = new SqlCommand("SelectUserDetails", con);           
             sqlCommand.CommandType =  CommandType.StoredProcedure;
             con.Open();
-            sqlCommand.Parameters.AddWithValue("@UserName",loginModel.UserName);
+            sqlCommand.Parameters.AddWithValue("@Email",loginModel.Email);
             SqlDataReader dataReader = sqlCommand.ExecuteReader();
-            LoginModel model = null;
+            
 
             while (dataReader.Read())
             {
-                model = new LoginModel();
-                model.UserName = dataReader["UserName"].ToString();
-               model.Password = dataReader["Password"].ToString();
+                userTypeData = new UserDetails();
+                userTypeData.Email = dataReader["Email"].ToString();
+                userTypeData.Password = dataReader["Password"].ToString();
+                userTypeData.id =  Convert.ToInt32(dataReader["Id"].ToString());
             }
 
 
                  //// check the username and password is matched in database or not
-             if (model.UserName == loginModel.UserName && model.Password == loginModel.Password)
+             if (userTypeData.Email == loginModel.Email && userTypeData.Password == loginModel.Password)
              {
                 string key = "This is my SecretKey which is used for security purpose";
 
@@ -131,7 +134,8 @@ namespace RepositoryLayer.Services
 
                 var claims = new[]
                 {
-                    new Claim("UserName", model.UserName),
+                    new Claim("Email", userTypeData.Email),
+                    new Claim("Id", userTypeData.id.ToString()),
                 };
 
                 var token = new JwtSecurityToken("Security token", "https://Test.com",
@@ -222,9 +226,9 @@ namespace RepositoryLayer.Services
         /// <param name="resetPasswordModel"></param>
         /// <param name="tokenString">tokenString</param>
         /// <returns>resetPasswordModel</returns>
-        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel, string tokenString)
+        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            var token = new JwtSecurityToken(tokenString);
+            var token = new JwtSecurityToken(resetPasswordModel.token);
 
             //// Claims the email from token
             var Email = (token.Claims.First(c => c.Type == "Email").Value);
@@ -254,23 +258,27 @@ namespace RepositoryLayer.Services
         /// <param name="userid">The userid.</param>
         /// <param name="file">The file.</param>
         /// <returns>url</returns>
-        public string ProfilePicture(string url, string userid, IFormFile file)
+        public async Task<string> ProfilePicture(int userid, IFormFile file)
         {
-            var image = (from user in this._authenticationContext.User
-                         where user.Id == userid
-                         select user).FirstOrDefault();
-
-            image.ProfilePicture = url;
-            //// save the result in database and return the response
-            var result = this._authenticationContext.SaveChanges();
-            //// If we get the result greater than zero then it will return Url
-            if (result > 0)
+            try
             {
-                return url;
+                CloudinaryImageUpload cloudinary = new CloudinaryImageUpload();
+                var url = cloudinary.UploadImageOnCloud(file);
+                SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPAddImageToProfile", con);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@UserId", userid);
+                sqlCommand.Parameters.AddWithValue("@Image", url);
+                con.Open();
+              
+                 await sqlCommand.ExecuteNonQueryAsync();
+                
+                    return url;
+              
             }
-            else
+            catch(Exception exception)
             {
-                return "Image not uploaded";
+                throw exception;
             }
         }
 

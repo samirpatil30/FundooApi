@@ -19,7 +19,9 @@ namespace CommanLayer.Model
         /// <value>
         /// The first name.
         /// </value>
-        [Key]               
+        [Key]
+
+        public int id { get; set; }
         [Required(ErrorMessage = "Please Enter Name")]
         [RegularExpression("^[a-zA-Z ]*$")]
         [StringLength(30, MinimumLength = 2)]
@@ -51,7 +53,6 @@ namespace CommanLayer.Model
         /// <value>
         /// The email.
         /// </value>
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 

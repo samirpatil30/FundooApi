@@ -11,6 +11,8 @@ namespace FundooProject.Controllers
     using System.Threading.Tasks;
     using BusinessLayer.Interface;
     using CommanLayer.Model;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +20,12 @@ namespace FundooProject.Controllers
     /// Account Controller
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase"/>
+     [EnableCors("CorsPolicy")]
+    [Authorize]
     [Route("api/[controller]")]
-    ////[ApiController]
+    [ApiController]
+    
+    //[EnableCors]
     public class AccountController : ControllerBase
     {
         /// <summary>
@@ -42,7 +48,9 @@ namespace FundooProject.Controllers
         /// <param name="details">The details.</param>
         /// <returns>result</returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("Add")]
+        //[EnableCors("CorsPolicy")]
         public async Task<IActionResult> AddUserDetail(UserDetails details)
         {
             //// the variable result stores the result of method AddUserDetails          
@@ -55,7 +63,9 @@ namespace FundooProject.Controllers
         /// </summary>
         /// <param name="details">The details.</param>
         /// <returns>ResultOfLogin</returns>
+       
         [HttpPost]
+        [AllowAnonymous]
         [Route("login")]
         public async Task<Tuple<string, string>> Login(LoginModel details)
         {
@@ -70,6 +80,7 @@ namespace FundooProject.Controllers
         /// <param name="passwordModel">The password model.</param>
         /// <returns>passwordModel</returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("ForgotPassword")]
         public async Task<string> ForgotPasword(ForgotPasswordModel passwordModel)
         {
@@ -84,10 +95,11 @@ namespace FundooProject.Controllers
         /// <param name="tokenString">The token string.</param>
         /// <returns>result</returns>
         [HttpPost]
-        [Route("Reset/{tokenString}")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordModel, string tokenString)
+        [AllowAnonymous]
+        [Route("Reset")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            var result = await this._account.ResetPassword(resetPasswordModel, tokenString);
+            var result = await this._account.ResetPassword(resetPasswordModel);
             return this.Ok(new { result });
         }
 
@@ -98,8 +110,9 @@ namespace FundooProject.Controllers
         /// <param name="file">The file.</param>
         /// <returns>UrlOfProfilePicture</returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("ProfilePicture")]
-        public IActionResult ProfilePicture(string userId, IFormFile file)
+        public IActionResult ProfilePicture(int userId, IFormFile file)
         {
             var UrlOfProfilePicture = this._account.ProfilePicture(userId, file);
             return this.Ok(new { UrlOfProfilePicture });
@@ -111,6 +124,7 @@ namespace FundooProject.Controllers
         /// <param name="adminDetails">adminDetails</param>
         /// <returns>result</returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("adminRegistration")]
         public async Task<IActionResult> AdminRegistration(UserDetails adminDetails)
         {
@@ -124,6 +138,7 @@ namespace FundooProject.Controllers
         /// <param name="loginModel">loginModel</param>
         /// <returns>token</returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("adminLogin")]
         public async Task<IActionResult> AdminLogin(AdminLoginModel loginModel)
         {
@@ -136,6 +151,7 @@ namespace FundooProject.Controllers
         /// </summary>
         /// <returns>return the result of UserStaticstics</returns>
         [HttpGet]
+        [AllowAnonymous]
         [Route("statitics")]
         public Dictionary<string, int> UserStaticstics()
         {
@@ -147,6 +163,7 @@ namespace FundooProject.Controllers
         /// </summary>
         /// <returns>retuen the list of users</returns>
         [HttpGet]
+        [AllowAnonymous]
         [Route("list of Users")]
         public IList<UserDetails> ListOfUsers()
         {

@@ -101,8 +101,30 @@ namespace FundooProject
             // Register the Swagger 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-                c.OperationFilter<FileUploadedOperation>();
+                // Your custom configuration
+                c.SwaggerDoc("v1", new Info { Title = "FundooNotes API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+               {
+               {"Bearer",new string[]{}}
+               });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:3000")
+                    );
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -134,38 +156,12 @@ namespace FundooProject
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
+            
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
-
-        /// <summary>
-        /// FileUploadedOperation
-        /// </summary>
-        /// <seealso cref="Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter" />
-        public class FileUploadedOperation : IOperationFilter
-        {
-            /// <summary>
-            /// Applies the specified swagger document.
-            /// </summary>
-            /// <param name="swaggerDocument">The swagger document.</param>
-            /// <param name="documentFilter">The document filter.</param>
-            public void Apply(Operation swaggerDocument, OperationFilterContext documentFilter)
-            {
-                if (swaggerDocument.Parameters == null)
-                {
-                    swaggerDocument.Parameters = new List<IParameter>();
-                }
-
-                swaggerDocument.Parameters.Add(new NonBodyParameter
-                {
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "string",
-                    Required = true
-                });
-            }
-        }   
+           
     }
 }

@@ -6,6 +6,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace FundooProject.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using BusinessLayer.Interface;
     using CommanLayer.Model;
@@ -41,9 +42,9 @@ namespace FundooProject.Controllers
         /// <param name="labelModel">The label model.</param>
         /// <returns>result</returns>
         [HttpPost]
-        public async Task<IActionResult> AddLabel(LabelModel labelModel)
+        public async Task<IActionResult> AddLabel(int NoteId,int UserId, List<string> labelName)
         {
-            var result = await this._bussinessManager.AddLabel(labelModel);
+            var result = await this._bussinessManager.AddLabel(NoteId,UserId,labelName);
             return this.Ok(new { result });
         }
 
@@ -54,9 +55,9 @@ namespace FundooProject.Controllers
         /// <param name="labelName">Name of the label.</param>
         /// <returns>result</returns>
         [HttpPut]
-        public async Task<IActionResult> UpdateLabel(LabelModel labelModel, string labelName)
+        public async Task<IActionResult> UpdateLabel(int noteId,int UserId, int labelId, string labelName)
         {
-            var result = await this._bussinessManager.UpdateLabel(labelModel, labelName);
+            var result = await this._bussinessManager.UpdateLabel(noteId,UserId, labelId, labelName);
             return this.Ok(new { result });          
         }
 
@@ -66,9 +67,9 @@ namespace FundooProject.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>result</returns>
         [HttpGet]
-        public IActionResult GetLabel(string userId)
+        public IActionResult GetLabel(int userId, int pageNumber, int LabelPerPage)
         {
-            var result = this._bussinessManager.GetLabel(userId);
+            var result = this._bussinessManager.GetLabel(userId, pageNumber,LabelPerPage);
             return this.Ok(new { result });
         }
 
@@ -79,9 +80,9 @@ namespace FundooProject.Controllers
         /// <param name="id">The identifier.</param>
         /// <returns>result</returns>
         [HttpDelete]
-        public async Task<IActionResult> DeleteLabel(LabelModel labelModel, int id)
+        public async Task<IActionResult> DeleteLabel(int id)
         {
-            var result = await this._bussinessManager.DeleteLabel(labelModel, id);
+            var result = await this._bussinessManager.DeleteLabel(id);
             return this.Ok(new { result });
         }
     }
