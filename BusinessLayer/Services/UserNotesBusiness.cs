@@ -64,20 +64,20 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns>User id</returns>
-        public IList<NotesModel> GetNotes(int UserId, int pageNumber, int NotePerPage)
+        public IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage )
         {
             try
             {
                 //// if checks the model is Null or not
-                if (UserId != null)
-                {
-                    var result = this._notesRepository.GetNotes(UserId, pageNumber, NotePerPage);
+               // if (UserId != null)
+                //{
+                    var result = this._notesRepository.GetNotes(userId, pageNumber, NotePerPage);
                     return result;
-                }
-                else
-                {
+               // }
+               // else
+                //{
                     throw new Exception("Invalid User id");
-                }
+               // }
             }
             catch (Exception exception)
             {

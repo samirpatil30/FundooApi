@@ -95,7 +95,7 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="model">model</param>
         /// <returns>UserID</returns>
-        public IList<NotesModel> GetNotes(int userId,int pageNumber, int NotePerPage)
+        public IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage)
         {
             IList<NotesModel> list = new List<NotesModel>(); 
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
@@ -104,11 +104,12 @@ namespace RepositoryLayer.Services
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.Parameters.AddWithValue("UserId", userId);
             SqlDataReader dataReader = sqlCommand.ExecuteReader();
-            while(dataReader.Read())
+            NotesModel notesModel ;
+            while (dataReader.Read())
             {
-                var notesModel = new NotesModel()
+                 notesModel = new NotesModel()
                 { 
-                   UserId = userId,
+                   UserId = userId   ,
                    NotesTitle = dataReader["NotesTitle"].ToString(),
                    NotesDescription = dataReader["NotesDescription"].ToString(),
                    CreatedDate = Convert.ToDateTime(dataReader["CreatedDate"]),
@@ -124,25 +125,26 @@ namespace RepositoryLayer.Services
             }
 
             //// Here the Linq querey return the Record match in Database
-            
-            int count = list.Count();
-            int CurrentPage = pageNumber;
-            int PageSize = NotePerPage;
-            int TotalCount = count;
+
+            //  int count = list.Count();
+            // int CurrentPage = pageNumber;
+            // int PageSize = NotePerPage;
+            // int TotalCount = count;
 
             // Calculating Totalpage by Dividing (No of Records / Pagesize)  
-            int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
-            var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+            // int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
+            // var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
 
-            var paginationMetadata = new
-            {
-                totalCount = TotalCount,
-                pageSize = PageSize,
-                currentPage = CurrentPage,
-                totalPages = TotalPages,   
-            };
-           
-            return items.ToList();
+            //  var paginationMetadata = new
+            //  {
+            //      totalCount = TotalCount,
+            //     pageSize = PageSize,
+            //     currentPage = CurrentPage,
+            //   totalPages = TotalPages,   
+            // };
+
+            // return items.ToList();
+            return list;
         }
 
         /// <summary>

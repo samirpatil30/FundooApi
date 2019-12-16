@@ -83,11 +83,12 @@ namespace FundooProject
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                
             }).AddJwtBearer(g =>
             {
+           
                 g.RequireHttpsMetadata = false;
-                g.SaveToken = false;
+                g.SaveToken = true;
                 g.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,

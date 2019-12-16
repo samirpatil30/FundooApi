@@ -25,8 +25,7 @@ namespace FundooProject.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    ////Authorize attribute to the controller class, then any action methods on the controller will be only available to authenticated users. 
-    [Authorize]
+
     public class NotesController : ControllerBase
     {
         /// <summary>
@@ -49,7 +48,6 @@ namespace FundooProject.Controllers
         /// <param name="notesModel">The notes model.</param>
         /// <returns>result</returns>
         [HttpPost]
-        [AllowAnonymous]
         ////[//Route("AddNotes")]
         public async Task<IActionResult> AddNotes(NotesModel notesModel)
         {
@@ -65,9 +63,9 @@ namespace FundooProject.Controllers
         /// <returns>result</returns>
         [HttpGet]
         [Route("Get/{userId}")]
-        public IActionResult getNotes(int userId, int pageNumber, int NotePerPage)
+        public IActionResult getNotes(int userId,  int pageNumber, int NotePerPage )
         {
-            var result = this._userNotes.GetNotes(userId, pageNumber, NotePerPage);
+            var result = this._userNotes.GetNotes( userId,  pageNumber,  NotePerPage );
             return this.Ok(new { result });
         }
 

@@ -103,7 +103,7 @@ namespace RepositoryLayer.Services
         /// <param name="loginModel">The login model.</param>
         /// <returns>loginModel</returns>
         public async Task<Tuple<string, string>> Login(LoginModel loginModel)
-        {
+         {
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
             SqlCommand sqlCommand = new SqlCommand("SelectUserDetails", con);           
             sqlCommand.CommandType =  CommandType.StoredProcedure;

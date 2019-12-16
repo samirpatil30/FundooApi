@@ -30,7 +30,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="UserId">UserId</param>
         /// <returns>user id</returns>
-        IList<NotesModel> GetNotes(int UserId,int pageNumber, int NotePerPage);
+        IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage );
 
         /// <summary>
         /// Update Notes
