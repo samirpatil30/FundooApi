@@ -1,0 +1,141 @@
+
+.toolBar {
+    position: absolute;
+    background-color: rgb(14, 199, 60);
+}
+
+.Search {
+    background-color: #ffffff;
+    width: 100%;
+    border-radius:  10px ;
+    border: 0.5px solid rgb(228, 226, 226) !important;
+}
+
+#searchIcon {
+    height: '100%';
+    color: rgb(20, 115, 211);
+    background-color: rgb(185, 56, 56);
+    border-radius: 7px ;
+}
+
+.mainDiv {
+    justify-content: center;
+    padding-left: 100px;
+    background-color: tomato;
+}
+
+.notes-remanider-div {
+    width: 350px;
+    height: 800px;
+}
+
+#add-alert-icon {
+    padding-right: 40px;
+}
+
+#label-id {
+    font-size: 30;
+    color: rgb(218, 4, 4);
+    padding-left: 50px;
+}
+
+.middle-div {
+    width: 100%;
+    background-color: blue;
+    position: absolute;
+    justify-content: center;
+}
+
+.right-div {
+    position: absolute;
+    width: 70%;
+    height: 455px;
+    top: 13%;
+    bottom: 10%;
+    right: 0%;
+    background-color: aqua;
+    float: left;
+}
+
+#reminder-notes-btn {
+    width: 220px;
+    height: 45px;
+    justify-content: left;
+    background-color: rgb(253, 253, 253);
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    padding-left: 40px;
+    font-size: 10px;
+}
+
+#noteIcon {
+    margin-right: 50px;
+}
+
+.TextSpan {
+    opacity: 1;
+    text-rendering: optimizeLegibility;
+}
+
+.ListButtons {
+    position: relative;
+    width: 100px;
+    background-color: rgb(255, 255, 255);
+    height:400px;
+}
+
+.MuiDrawer-paper {
+    top: 65px !important;
+    /* flex: 1 0 auto;
+    height: 100%;
+    display: flex;
+    outline: 0;
+    z-index: 1200;
+    position: fixed;
+    overflow-y: auto;
+    flex-direction: column; */
+}
+
+#span-label {
+    padding: 20px;
+}
+
+.MuiAppBar-colorPrimary {
+    position: relative;
+    max-height: 18%;
+    max-width: 100%;
+    color: rgb(0, 0, 0) !important;
+    background-color: rgb(254, 255, 255) !important;
+}
+
+.header-div {
+    justify-content: center;
+    top: 0%;
+}
+
+#search-icon {
+    margin-left: 120px;
+}
+
+
+
+.Search {
+    border: 1px groove;
+}
+
+.ListButtons {
+    width: 150px;
+}
+
+.DrawersIcon
+{
+    position: relative;
+    background-color: rgb(255, 255, 254);
+}
+.RefreshAndSettingIcon
+{
+    position: relative; 
+    max-height: 10%;
+    width: 100%;
+    margin-left: 0%;
+}

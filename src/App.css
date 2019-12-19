@@ -1,0 +1,112 @@
+
+.wrapper {
+  position: absolute;
+  width: 80%;
+  height: 500px;
+  margin-left: 80px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  border:2px solid rgba(44, 44, 44, 0.068);
+}
+
+.leftDiv
+{
+  width: 100%;
+   height: 100%;
+   background-color: rgb(64, 117, 62)
+
+}
+
+#outlined-basic1
+{
+  height: 15px;
+}
+#SignUpButton
+{
+  margin-left: 10%;
+}
+
+.firstname
+{
+  position: relative;
+  width: 100%;
+  margin-top: 5%;
+  display: flex;
+  margin-right: 18%;
+  background-color: rgb(37, 153, 147);
+}
+#FirstNameId
+{
+margin-left: 10%;
+  justify-content: space-between;
+  background-color: burlywood;
+}
+#SecondNameId
+{
+
+right: 20%;
+background-color: cyan;
+  float: right;
+}
+
+.LastName
+{
+position: absolute;
+left: 40%;
+top:10%;
+font-size: 5%;
+}
+
+.username
+{
+  width: 100%;
+  margin-top: 5%;
+  margin-left: 5%;
+ background-color: rgb(255, 255, 255);
+  font-size: small;
+}
+
+.Password
+{
+  margin-top: 4%; 
+  margin-left: 5%; 
+  margin-bottom: 5%;
+}
+
+.ServiceType
+{
+  margin-left: 3%; 
+  margin-bottom: 2%;
+}
+
+.button
+{
+  margin-left: 5%;
+  width: auto;
+  color: blue;
+}
+
+@media (max-width:950px)
+{
+  .EmailOrPhone{
+    width: 100px;
+    height: 15px;
+  }
+
+  .Password
+  {
+    width: 100px;
+    height: 15px;
+  }
+.forgot{
+  width: 100px;
+    height: 15px;
+}
+  #buttonSignIn
+  {
+    width: 100px;
+    height: 15px;
+  }
+}

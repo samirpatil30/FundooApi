@@ -1,0 +1,20 @@
+.MuiListItem-root {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    text-align: left;
+    /* align-items: center; */
+    left: -32px !important;
+   
+}
+
+.MuiListItem-gutters {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.MuiTypography-body1 {
+    font-size: 0.8rem  !important;
+    line-height: 1  !important;
+    letter-spacing: 0.00938em  !important;
+}

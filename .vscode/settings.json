@@ -1,0 +1,8 @@
+{
+    "editor.suggest.localityBonus": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    }
+}

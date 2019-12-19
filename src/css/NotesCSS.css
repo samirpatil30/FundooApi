@@ -1,0 +1,42 @@
+.card-class
+{
+width: 100px;
+min-height: 50px;
+background-color:rgb(80, 77, 77);
+border: 0.5px solid;
+border-color: rgb(8, 8, 8);
+margin-top: 3%;
+margin-left: 10%;
+}
+
+.card-div
+{
+ position: relative;
+margin-left: 250px;
+
+
+}
+
+.title-text-area
+{
+ 
+  outline: none;
+  border: none;
+  font-size: 15px;    
+  min-width: 416px;
+  min-height: 30px;   
+}
+
+.take-note-text-area
+{
+  outline: none;
+  border: none;
+  font-size: 15px;
+  min-width: 416px;
+ min-height: 30px;
+margin-left: 2px;
+}
+
+.MuiCardContent-root:last-child {
+  padding-bottom: 1px !important;
+}
