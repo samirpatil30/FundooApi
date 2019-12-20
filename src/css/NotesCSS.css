@@ -1,42 +1,53 @@
+.MainNotesDiv
+{
+  position: relative;
+  width:45%;
+  margin-left: 20%;
+  top:1%;
+  background-color: rgb(255, 255, 255);
+}
+
 .card-class
 {
-width: 100px;
-min-height: 50px;
-background-color:rgb(80, 77, 77);
-border: 0.5px solid;
+width: 100%;
+min-height: 50%;
+background-color:rgb(188, 230, 3);
 border-color: rgb(8, 8, 8);
 margin-top: 3%;
-margin-left: 10%;
+
+background-color: red;
 }
 
 .card-div
 {
  position: relative;
-margin-left: 250px;
-
-
 }
-
+ 
 .title-text-area
 {
- 
+ background-color: rgb(253, 253, 253);
   outline: none;
   border: none;
   font-size: 15px;    
-  min-width: 416px;
-  min-height: 30px;   
+  width: 100%;
+  height: 40px;   
 }
 
-.take-note-text-area
+.take-note
 {
   outline: none;
   border: none;
+  background-color: rgb(255, 255, 255);
   font-size: 15px;
-  min-width: 416px;
- min-height: 30px;
-margin-left: 2px;
+  width: 100%;
+  height: 30px; 
+  margin-left: 2px;
 }
 
-.MuiCardContent-root:last-child {
-  padding-bottom: 1px !important;
+.Button
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }

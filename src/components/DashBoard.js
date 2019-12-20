@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import SearchIcon from '@material-ui/icons/Search';
@@ -81,9 +80,9 @@ export default class DashBoard extends Component {
             <div className="header-div">
                 <AppBar className="AppBar" >
                     <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu">
+                        <IconButton  onClick={e => this.setState({ left: !this.state.left })} edge="start" color="inherit" aria-label="menu">
                             <MenuIcon
-                                onClick={e => this.setState({ left: !this.state.left })}
+                               
                             />
                         </IconButton>
                         <Typography variant="h6">
@@ -113,7 +112,6 @@ export default class DashBoard extends Component {
                 </AppBar>
                  <Divider />
                 <div>
-                   
                     <Drawer
                         variant="persistent"
                         open={this.state.left}
@@ -125,7 +123,10 @@ export default class DashBoard extends Component {
 
                 </div>
 
+                
             </div>
+
+            
         );
     }
 }

@@ -9,7 +9,7 @@ import DashBoard from './components/DashBoard'
 import Notes from './components/Notes';
  import { Toolbar } from '@material-ui/core';
 import GetAllNotes from './components/GetAllNotes' 
-import {DotMenu} from './components/DotMenu' 
+import Icons from './components/Icons';
 
 class App extends Component {
 
@@ -30,8 +30,8 @@ class App extends Component {
                 <Route  path= "/Dashboard" component={DashBoard  } />
                 <Route   path= "/Notes" component={Notes} />
                 <Route  path= "/Dashboard/notes" component={ GetAllNotes} />
-                <Route  path= "/Menu" component={ DotMenu} />
-         
+                <Route  path= "/Icons" component={ Icons} />
+
         
       </div>
       </BrowserRouter>

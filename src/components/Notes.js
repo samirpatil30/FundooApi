@@ -13,8 +13,6 @@ import ImageIcon from '@material-ui/icons/Image';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import UndoIcon from '@material-ui/icons/Undo';
-import RedoIcon from '@material-ui/icons/Redo';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import { ThemeProvider ,createMuiTheme} from '@material-ui/core'
@@ -27,6 +25,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Icons from './Icons'
 import '../css/NotesCSS.css';
 
 import AxiosService from '../service/postData';
@@ -38,7 +37,7 @@ const theme = createMuiTheme({
 
         MuiPaper: {
             rounded: {
-                width: "420px",
+                width: "100%",
                 borderRadius: "10px"
 
             }
@@ -47,6 +46,11 @@ const theme = createMuiTheme({
             root: {
 
             }
+        },
+        MuiButton: {
+            root: {
+                      height: "10px"
+                  }
         },
         TextareaAutosize:
         {
@@ -124,82 +128,33 @@ export default class Notes extends Component
     render(){
         const { open } = this.state;
         return(
-            <div>
+            <div className="MainNotesDiv"> 
                 
             <ThemeProvider theme={theme}>
            
             <div className="card-div" >
           
                <Card className="card-class">
-                <CardContent id="card-content">   
-                <div className="TextFieldTitle">
+                  <CardContent id="card-content">   
+                      <div className="TextFieldTitle">
                     
-                    <TextareaAutosize className="title-text-area" name="notesTitle" onChange={this.onchange} onClick={this.operation} placeholder="Title" />
-                      {
-                        this.state.showMe ?
-                        <div className="TextField2">
-                              <TextareaAutosize className="take-note-text-area" name="notesDescription" onChange={this.onchange} aria-multiline="true" aria-label="empty textarea" placeholder="Take A Note" />
-                              <Tooltip title="Reminder" enterDelay={250} leaveDelay={10}>
-                              <IconButton color="black">
-                              <Badge  color="secondary">
-                              < AccessAlarmsIcon precision={1} className="bottom-icon-list"/>
-                              </Badge>
-                              </IconButton>
-                              </Tooltip>
-
-                              <Tooltip title="Collaborate" enterDelay={250} leaveDelay={100}>
-                              <IconButton color="black">
-                              <Badge  color="secondary">
-                              <PersonAddIcon  className="bottom-icon-list"/>
-                              </Badge>
-                              </IconButton>
-                              </Tooltip>
-
-                               <Tooltip title="Color" enterDelay={250} leaveDelay={100}>
-                               <IconButton color="black">
-                                <Badge  color="secondary">
-                                <PaletteIcon  className="bottom-icon-list"/>
-                                </Badge>
-                                </IconButton>
-                                </Tooltip>
-                
-                                <Tooltip title="Image" enterDelay={250} leaveDelay={100}>
-                                <IconButton color="black">
-                                <Badge  color="secondary">
-                                <ImageIcon  className="bottom-icon-list"/>
-                                </Badge>
-                                </IconButton>
-                                </Tooltip>
-
-                                <Tooltip title="Archive" enterDelay={250} leaveDelay={100}>
-                                <IconButton color="black">
-                                 <Badge  color="secondary">
-                                <ArchiveIcon  className="bottom-icon-list"/>   
-                                </Badge>
-                                </IconButton>
-                                </Tooltip>
-
-            
-                                  <Tooltip title="More" enterDelay={250} leaveDelay={100}>
-                                  <IconButton color="black" onClick={this.handleClick}>
-                                  <Badge  color="secondary">
-                                  <MoreVertIcon  className="bottom-icon-list"/>
-                                  </Badge>
-                                  </IconButton>
-                                  </Tooltip>      
-                                     
-                                  <Button className="CloseButton" onClick={this.AddNotes}>close</Button>  
-                                  
+                          <TextareaAutosize className="title-text-area" name="notesTitle" onChange={this.onchange} onClick={this.operation} placeholder="Title" />
+                          {
+                              this.state.showMe ?
+                              < div className="TextField2">
+                                  <TextareaAutosize className="take-note" name="notesDescription" onChange={this.onchange} aria-multiline="true" aria-label="empty textarea" placeholder="Take A Note" />                                   
+                                   <div className="Button"> 
+                                    <Icons />                                                
+                                    <Button className="CloseButton" onClick={this.AddNotes}>close</Button> 
+                                   </div>                                                                    
+                              </div >
+                              : null
+                          }
                         </div>
-                      : null
-             }
-                </div>
             
-               </CardContent>
-          
-               </Card>
-                 
-               </div>
+                    </CardContent>
+                  </Card>                 
+              </div>
          
                </ThemeProvider>
 

@@ -13,15 +13,11 @@ export default class GetAllNotes extends Component
         this.state={
             AllNotes:[],
             getAllNotes:[]
+
         }
 
         this. getNotesUser = this. getNotesUser.bind(this);
         this.onchange = this.onchange.bind(this);
-    }
-
-    componentDidMount(){
-        this.setState({ AllNotes: this.getAllNotes })
-       
     }
 
     getNotesUser() {
@@ -40,6 +36,10 @@ export default class GetAllNotes extends Component
         console.log('state notes array ',this.state.getAllNotes);
     }
 
+componentDidMount(){
+        this.setState({ AllNotes: this.getAllNotes })
+        this.getNotesUser();
+    }
   onchange(e)
   {
     this.setState({[e.target.name]: e.target.value});
@@ -47,13 +47,11 @@ export default class GetAllNotes extends Component
   }
 render()
     {
-        console.log('bvdfshd');
         
     return(
-            <div  className="notes-top-create">
+            <div  className={this.state.open?null:"notes-top-create"}>
                 <div>
-                    <Notes />
-                    <Button onClick={this.getNotesUser}>ClcikMe</Button>
+                    <Notes />          
                 </div>
 
                 <div>

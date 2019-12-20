@@ -3,17 +3,18 @@ import axios from 'axios';
 
 export default class AxiosService  {
     
+     url= 'https://localhost:44313';
     loginService(userData)
     {
         console.log(" data in axios service",userData);    
-        return axios.post(`https://localhost:44313/api/Account/login`,  userData)
+        return axios.post(this.url+'/api/Account/login',  userData)
     }
      
 
     ForgotPasswordService(userData)
     {
         console.log(" forgot password in axios service",userData);
-        return axios.post(`https://localhost:44313/api/Account/ForgotPassword`,  userData)
+        return axios.post(this.url+'/api/Account/ForgotPassword',  userData)
     }
         
     ResetPasswordService(userData)
@@ -24,8 +25,9 @@ export default class AxiosService  {
 
     AddNotesService(userData)
     {
-        var JwtToken = localStorage.getItem('Token')      
-        let response = axios.post(`https://localhost:44313/api/Notes`, userData, {headers:{Authorization: `bearer ${JwtToken}`}} );
+        var JwtToken = localStorage.getItem('Token');
+        var header={headers:{Authorization: `bearer ${JwtToken}`}};      
+        let response = axios.post(`https://localhost:44313/api/Notes`, userData, header);
         console.log(response);
         
         return response;
@@ -38,5 +40,13 @@ export default class AxiosService  {
         var JwtToken = localStorage.getItem('Token')
        console.log("This is get notes service", JwtToken);
         return axios.get(`https://localhost:44313/api/Notes/Notes`, {headers:{Authorization: `bearer ${JwtToken}`}})
+    }
+
+    TrashNotesService(notesId)
+    {
+        var JwtToken = localStorage.getItem('Token')
+        console.log('Trashhhhh',JwtToken)
+        var header = { headers: { Authorization: `bearer ${JwtToken}` } };
+        return axios.delete('https://localhost:44313/api/Notes/Trash',notesId,header)
     }
 }
