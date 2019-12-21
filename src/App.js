@@ -10,7 +10,7 @@ import Notes from './components/Notes';
  import { Toolbar } from '@material-ui/core';
 import GetAllNotes from './components/GetAllNotes' 
 import Icons from './components/Icons';
-
+import NoteCard from './components/NoteCard'
 class App extends Component {
 
   render() {
@@ -30,7 +30,7 @@ class App extends Component {
                 <Route  path= "/Dashboard" component={DashBoard  } />
                 <Route   path= "/Notes" component={Notes} />
                 <Route  path= "/Dashboard/notes" component={ GetAllNotes} />
-                <Route  path= "/Icons" component={ Icons} />
+                <Route  path= "/Mynotes" component={ NoteCard} />
 
         
       </div>

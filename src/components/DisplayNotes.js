@@ -18,61 +18,70 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import  '../css/DisplayNotesCSS.css'
 import Icons from './Icons'
+import TextField from '@material-ui/core/TextField';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core'
+import EditLocationOutlinedIcon from '@material-ui/icons/EditLocationOutlined';
 
-
-export class DisplayNotes extends React.Component{
+export default class DisplayNotes extends React.Component{
 
     constructor(props){
         super(props)
         this.state={
-            notes:[]
+            notes:[],
+            notesTitle:'',
         }
+
+        
     }
+
+    handleChange = (event) => {
+       
+        //   this.notesTitle= event.target.value;
+        //   this.setState({
+        //             notesTitle: this.notesTitle
+
+        //   })
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+         console.log('Notes title', this.state.notesTitle)
+
+
+        //  this.setState({
+        //      notesTitle: event.target.value
+        // });
+      };
     render(){
         console.log(" print all  notes i display ",this.props.notes);
 
        var  printNoteList=  this.props.notes.map((item,index)=>{
                 return(
-                <div key={index} className="CradDiv">
-                     <Card className="card">
-                            <CardContent id="card-content">   
-                            <div>
-                                <div className="TextFieldTitle">
-                    
-                                    <TextareaAutosize 
-                                    className="DisplayNotsTitle" 
-                                    name="notesTitle" 
-                                    onChange={this.onchange} 
-                                    onClick={this.operation} 
-                                    placeholder="Title"
-                                    value={item.notesTitle} />
-                      
-                                </div>
-                                    <div className="TextField2">
-                                        <TextareaAutosize className="note-text-area" 
-                                        name="notesDescription" 
-                                        onChange={this.onchange} 
-                                        aria-multiline="true" 
-                                        aria-label="empty textarea" 
-                                        placeholder="Take A Note"
-                                        value={item.notesDescription} />
-                                </div>
-                                    <div className="IconDiv">                    
-                                          <Icons noteid={item} />
-                                    </div>                                  
+                           
+                
+                                <div id="Small-NotesCardInner" >
+          
+                                    <Card id="CardIdAllNotes">
+                                        <div className="Small-NotesTitleAndDesc">
+                                             {/* < EditLocationOutlinedIcon id="pin" />          */}
+                                            <TextareaAutosize id="titleId"   name="notesTitle" value={item.notesTitle} placeholder="Title" /> 
+                                                     < EditLocationOutlinedIcon  />                 
+                                            <TextareaAutosize id="DescriptionId"  name="notesDescription" value={item.notesDescription} placeholder="Description" />
+                                        </div>
 
+                                        <div  className="Small-closeButton">
+                                            <div>
+                                                <Icons noteid={item} />
+                                            </div>
+                                        </div>
+                                    </Card>                 
                                 </div>
-            
-                            </CardContent>
-                        </Card>  
-                                     
-                </div>
+                           
                     )
-                    })
+                    }
+                    )
 
         return(
-            <div>
+            <div className="Small-CardDiv"> 
                 {printNoteList}
             </div>
         )

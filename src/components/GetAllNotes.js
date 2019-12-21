@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Notes from './Notes'
-import  {DisplayNotes} from './DisplayNotes'
+import DisplayNotes from './DisplayNotes'
 import '../css/NotesCSS.css'
 import { Button } from '@material-ui/core';
 import AxiosService from '../service/postData';

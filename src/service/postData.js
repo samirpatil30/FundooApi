@@ -45,8 +45,10 @@ export default class AxiosService  {
     TrashNotesService(notesId)
     {
         var JwtToken = localStorage.getItem('Token')
-        console.log('Trashhhhh',JwtToken)
-        var header = { headers: { Authorization: `bearer ${JwtToken}` } };
+        console.log('Trashhhhh',JwtToken,notesId)
+        var header = { headers: { Authorization: `Bearer ${JwtToken}` } };
+        console.log('Header',header);
+        
         return axios.delete('https://localhost:44313/api/Notes/Trash',notesId,header)
     }
 }
