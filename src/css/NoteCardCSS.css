@@ -13,6 +13,7 @@
 position: relative;
 width: 70%;
 height: 70%;
+
 background-color:rgb(255, 255, 255);
 }
 
@@ -54,7 +55,11 @@ background-color:rgb(255, 255, 255);
     position: absolute;
     right: 0;
 }
-
+#UpdateCard
+{
+  border: 1px solid gray;
+  box-shadow: 1px gray;
+}
 /*
 .NotesCard-div
 {

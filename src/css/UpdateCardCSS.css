@@ -1,0 +1,58 @@
+.Update-Notes
+{
+    position: relative;
+    width: 100%;
+    height: auto;
+    border: 2px solid chocolate;
+    background-color: rgb(123, 185, 24);
+}
+
+#Dialog
+{
+    position: relative;
+    width: 100%;
+}
+
+#UpdateCard
+{
+    width: 100%;
+    min-height: 42%;
+}
+
+.Update-NotesTitleAndDesc
+{
+    width: 100%;
+    margin-top: 2%;
+    margin-left: 1%;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    justify-content: space-between;
+}
+
+#UpdateNotetitleId
+{
+    border: none;
+    outline: none;
+    min-height: 18%;
+    top: 0%;
+    width: 87%;
+}
+
+#UpdateNoteDescriptionId
+{
+    border: none;
+    outline: none;
+    width: 87%;
+
+}
+
+
+
+#Update-UpdateNotesCardInner
+{
+width: 100%;
+height: auto;
+margin-top: 2%;
+background-color:rgb(255, 255, 255);
+box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2), 0px 0px 0px 3px rgba(0,0,0,0.14), 0px 1px 1px 1px rgba(0,0,0,0.12) !important
+}

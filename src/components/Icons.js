@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import AccessAlarmsIcon from '@material-ui/icons/AccessAlarms';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PaletteIcon from '@material-ui/icons/Palette';
@@ -17,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import '../css/IconsCSS.css';
 import  AxiosService  from '../service/postData';
-
+import Collaborator from './Collaborator'
 var axiosObject = new AxiosService;
 export default class Icons extends Component
 {
@@ -25,13 +24,14 @@ export default class Icons extends Component
         super(props);
         this.state={
             show:'false',
-            anchorEl: null
+            anchorEl: null,
+            showCollabrator: false
         }
         
     //console.log('this is delete note prop', this.props)
 
         this.handleClick=this.handleClick.bind(this)
-        this.DeleteNote = this.DeleteNote.bind(this)
+
     }
    
       handleClick = event => {
@@ -44,18 +44,36 @@ export default class Icons extends Component
       
       };
 
+    ArchiveNotes=()=> {
+           // console.log('this is delete note function', this.props )
+    var id=   this.props.noteid.id
+     console.log('Archive note id in Archive()',id)
     
-DeleteNote()
-  {
+   
+              axiosObject.ArchiveNotesService(id).then(response=>{
+                 console.log(" response in ",response);
+                  })
+
+            .catch(error => {
+            console.log('def',error.response)
+            });
+    }
+
+
+  DeleteNote=()=>{
   
    // console.log('this is delete note function', this.props )
-    var id=  {noteId : this.props.noteid.id}
+    var id=  this.props.noteid.id
      console.log('delete note id in Delete()',id)
     
    
            axiosObject.TrashNotesService(id).then(response=>{
          console.log(" response in ",response);
    })
+
+   .catch(error => {
+    console.log('def',error.response)
+});
   }
 
   onchange(e)
@@ -64,20 +82,28 @@ DeleteNote()
     console.log(this.state);
   }
 
+  openCollabrator=() =>
+  {
+    this.setState({
+      showCollabrator: !this.state.showCollabrator
+    })
+  }
     render(){
-      console.log(this.props);
+      console.log('Iconss',this.props.noteid);
       
         const { anchorEl } = this.state;
         return(
           
             <div className="icon-div-flex">
-                            
+                           { this.state.showCollabrator ?
+                                <Collaborator /> : null}
+                           
                               <Tooltip title="Archive">
-                              <IconButton size="small" color="black">
+                              <IconButton size="small" onClick={this.ArchiveNotes} color="black">
                               <ArchiveIcon fontSize="inherit" />   
                               </IconButton>
                               </Tooltip>                          
-                            
+                              
                               <Tooltip title="Reminder">
                               <IconButton  size="small" color="black">
                               <Badge  color="secondary">
@@ -86,16 +112,18 @@ DeleteNote()
                               </IconButton>
                               </Tooltip>
                           
-
+                              
+                              
                             
                               <Tooltip title="Collaborate" >
-                              <IconButton  size="small" color="black">
+                              <IconButton  size="small" color="black" onClick={this.openCollabrator}>
+                               
                               <Badge  color="secondary">
                               <PersonAddIcon fontSize="inherit" />
                               </Badge>
                               </IconButton>
                               </Tooltip>
-                                
+                              
 
                              
                               <Tooltip title="Color" >
@@ -119,9 +147,9 @@ DeleteNote()
                                   
 
      
-                                
+                            
                               <Tooltip title="More" >
-                              <IconButton  size="small" color="inherit" onClick={this.handleClick}>
+                              <IconButton  size="small" color="balck" onClick={this.handleClick}>
                               <Badge  color="secondary">
                               <MoreVertIcon fontSize="inherit" 
                                   aria-owns={anchorEl ? 'simple-menu' : 'simple-menu'}                            
@@ -142,7 +170,9 @@ DeleteNote()
                                     <MenuItem onClick={this.handleClose} onClick={this.DeleteNote} >Delete Note </MenuItem>
                                     <MenuItem onClick={this.handleClose}>Add Label</MenuItem>
                                   </Menu>
+                            
                                 </div>
+    
             </div>
         )
     }

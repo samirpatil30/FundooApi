@@ -42,13 +42,42 @@ export default class AxiosService  {
         return axios.get(`https://localhost:44313/api/Notes/Notes`, {headers:{Authorization: `bearer ${JwtToken}`}})
     }
 
-    TrashNotesService(notesId)
+    TrashNotesService(NoteId)
     {
         var JwtToken = localStorage.getItem('Token')
-        console.log('Trashhhhh',JwtToken,notesId)
+        console.log('Trashhhhh',JwtToken,NoteId)
         var header = { headers: { Authorization: `Bearer ${JwtToken}` } };
         console.log('Header',header);
         
-        return axios.delete('https://localhost:44313/api/Notes/Trash',notesId,header)
+        return axios.post("https://localhost:44313/api/Notes/"+NoteId+"/Trash",null,header)
+    }
+
+    
+
+    ArchiveNotesService(NoteId)
+    {
+        console.log('This is axios note id', NoteId)
+        var JwtToken = localStorage.getItem('Token')
+        var header = { headers: { Authorization: `Bearer ${JwtToken}` } };
+        console.log('This is token is Archive axios', header)
+        return axios.post("https://localhost:44313/api/Notes/"+NoteId+"/Archive",null,header)
+    }
+
+    GetAllArchiveNotesService()
+    {
+        console.log("GetNotesService");
+        
+        var JwtToken = localStorage.getItem('Token')
+        console.log("This is get notes service", JwtToken);
+        return axios.get(`https://localhost:44313/api/Notes/GetArchiveNotes`, {headers:{Authorization: `bearer ${JwtToken}`}})
+    }
+
+     GetAllTrashNotesService()
+    {
+        console.log("GetNotesService");
+        
+        var JwtToken = localStorage.getItem('Token')
+        console.log("This is get notes service", JwtToken);
+        return axios.get(`https://localhost:44313/api/Notes/GetTrashNotes`, {headers:{Authorization: `bearer ${JwtToken}`}})
     }
 }

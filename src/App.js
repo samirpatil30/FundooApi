@@ -11,6 +11,11 @@ import Notes from './components/Notes';
 import GetAllNotes from './components/GetAllNotes' 
 import Icons from './components/Icons';
 import NoteCard from './components/NoteCard'
+import GetArchiveNotes from './components/GetArchiveNotes'
+import GetTrashNotes from './components/GetTrashNotes'
+import Collaborator from './components/Collaborator'
+// import Reminder from './components/Reminder'
+
 class App extends Component {
 
   render() {
@@ -30,7 +35,10 @@ class App extends Component {
                 <Route  path= "/Dashboard" component={DashBoard  } />
                 <Route   path= "/Notes" component={Notes} />
                 <Route  path= "/Dashboard/notes" component={ GetAllNotes} />
-                <Route  path= "/Mynotes" component={ NoteCard} />
+                 <Route  path= "/Dashboard/ArchiveNotes" component={ GetArchiveNotes} />
+                 <Route  path= "/Dashboard/TrashNotes" component={ GetTrashNotes} />
+                <Route  path= "/Mynotes" component={ NoteCard } />
+                 {/* <Route  path= "/reminder" component={ Reminder} /> */}
 
         
       </div>

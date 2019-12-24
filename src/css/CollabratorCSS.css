@@ -1,0 +1,46 @@
+#emailtextfield
+{
+    outline: none;
+  
+}
+#addiconWithText
+{
+    display: flex;
+    flex-direction: row;
+    margin-left: 5px;
+   
+}
+
+#addIconId
+{
+    padding-right: 15px;
+}
+.addcolabarateList
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;   
+}
+#listItem
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 50px;
+  
+}
+.button-icon-textfielddiv
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#textfieldEmail
+{
+outline: none;
+border: none;
+}
+
+.MuiDialog-paperWidthSm {
+    max-width: 414px !important;
+}

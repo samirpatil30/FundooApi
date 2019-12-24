@@ -1,41 +1,39 @@
 import React, { Component } from "react";
-import Notes from "./Notes";
 import DisplayNotes from "./DisplayNotes";
-import "../css/NotesCSS.css";
 import { Button } from "@material-ui/core";
 import AxiosService from "../service/postData";
 import DashBoard from "./DashBoard";
 
-var getnotes = new AxiosService();
-export default class GetAllNotes extends Component {
+var axiosObject = new AxiosService();
+export default class GetArchiveNotes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       AllNotes: [],
-      getAllNotes: []
+      ArchiveNotes: []
     };
 
-    this.getNotesUser = this.getNotesUser.bind(this);
+    this.getArchiveNotes = this.getArchiveNotes.bind(this);
     this.onchange = this.onchange.bind(this);
   }
 
-  getNotesUser() {
-    getnotes.GetNotesService().then(response => {
+  getArchiveNotes() {
+    axiosObject.GetAllArchiveNotesService().then(response => {
       console.log(response);
       let array = [];
       response.data.result.map(data => {
         array.push(data);
       });
       this.setState({
-        getAllNotes: array
+        ArchiveNotes: array
       });
     });
     console.log("state notes array ", this.state.getAllNotes);
   }
 
   componentDidMount() {
-    this.setState({ AllNotes: this.getAllNotes });
-    this.getNotesUser();
+    this.setState({ AllNotes: this.ArchiveNotes });
+    this.getArchiveNotes();
   }
   onchange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -44,12 +42,12 @@ export default class GetAllNotes extends Component {
   render() {
     return (
       <div className={this.state.open ? null : "notes-top-create"}>
-        <div>
-          <Notes />
-        </div>
+        {/* <div>
+                    <Notes />          
+                </div> */}
 
         <div>
-          <DisplayNotes notes={this.state.getAllNotes}></DisplayNotes>
+          <DisplayNotes notes={this.state.ArchiveNotes}></DisplayNotes>
           {/* <DashBoard notesInDashBoard={this.state.getAllNotes} />          */}
         </div>
       </div>

@@ -21,14 +21,15 @@ export default class NoteCard extends Component
   {
     super(props)
     this.state = {
+       
         open: false,
         showMe: false,
         notesTitle:'',
-        notesDescription:'' 
+        notesDescription:'' ,
+        NotesInfo:[]
+    
       };
-
       
-   
     this.onchange = this.onchange.bind(this);
   }
     
@@ -38,17 +39,18 @@ export default class NoteCard extends Component
       // console.log(this.state);
     }
       
-    render(){
+    render() {
+        console.log('NoteCard ***', this.props.NotesInfo)
         const { open } = this.state;
         return(
             <div className="CardNoteDiv"> 
                 
             <div className="NotesCard-div" >
           
-               <Card>
+               <Card id = "UpdateCard">
                     <div className="titleAndDescription">
-                         < EditLocationOutlinedIcon id="pin" />
-                     <TextareaAutosize id="titleId"   name="notesTitle" onChange={this.onchange} onClick={this.operation} placeholder="Title" />                           
+                            < EditLocationOutlinedIcon id="pin" />
+                            <TextareaAutosize id="titleId" name="notesTitle" onChange={this.onchange} value={this.props.NotesInfo.notesTitle} placeholder="Title" />                           
                         <TextareaAutosize id="DescriptionId"  name="notesTitle" onChange={this.onchange} onClick={this.operation} placeholder="Description" />
                     </div>
 

@@ -19,30 +19,74 @@ import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
-
+import  AxiosService  from '../service/postData';
 import '../css/DashBoardCSS.css';
+import DisplayNotes from './DisplayNotes'
 
+var axiosObject = new AxiosService;
 export default class DashBoard extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            left: true,
-
+            left: false,
+            notesInDashBoard:[],
         }
+        // this.GetNotes = this.GetNotes.bind(this);
+        // this.get = this.get.bind(this)
+    }
+
+    
+    // GetNotes() {
+    //     axiosObject.GetNotesService().then(response => {
+    //                     console.log(response);
+                       
+    //             });
+                      
+    //     }
+        
+    //       GetArchiveNotes=()=> {
+    //        // console.log('this is delete note function', this.props )
+        
+    //           axiosObject.GetAllArchiveNotesService().then(response=>{
+    //              console.log(" response in ",response);
+    //               })
+
+    //         .catch(error => {
+    //         console.log('def',error.response)
+    //         });
+    // }
+            
+    get=() =>
+    {
+       
+        
+        this.props.history.push('/Dashboard/notes')
+        
+    }
+
+    getArchive=() =>
+    {
+         this.props.history.push('/Dashboard/ArchiveNotes')
+    }
+
+    getTrash=() =>
+    {
+          this.props.history.push('/Dashboard/TrashNotes')
     }
 
     render() {
-                console.log('in dashboard');
+                console.log('in dashboard render', this.props.notesInDashBoard);
+                 console.log('this is GetNote()', this.state.getAllNotes);
                 
         const sideList =
             (
 
                 <div className="DrawersIcon">
                     <div className="ListButtons">
-                         <Button id="reminder-notes-btn" >
-                          <NoteOutlinedIcon id="noteIcon"></NoteOutlinedIcon>
+                         <Button id="reminder-notes-btn" onClick={this.get}>
+                          <NoteOutlinedIcon id="noteIcon" ></NoteOutlinedIcon>
                             Note
                          </Button>
 
@@ -62,12 +106,12 @@ export default class DashBoard extends Component {
                           </div>
                           <Divider />
 
-                          <Button id="reminder-notes-btn"   >
+                          <Button id="reminder-notes-btn"  onClick={this.getTrash} >
                           <DeleteOutlineOutlinedIcon id="noteIcon"></DeleteOutlineOutlinedIcon>
                             Trash
                           </Button>
                           <br />
-                          <Button id="reminder-notes-btn"   >
+                          <Button id="reminder-notes-btn" onClick={this.getArchive}  >
                            <ArchiveOutlinedIcon id="noteIcon"></ArchiveOutlinedIcon>
                               Archive
                           </Button>
@@ -81,17 +125,15 @@ export default class DashBoard extends Component {
                 <AppBar className="AppBar" >
                     <Toolbar>
                         <IconButton  onClick={e => this.setState({ left: !this.state.left })} edge="start" color="inherit" aria-label="menu">
-                            <MenuIcon
-                               
-                            />
+                            <MenuIcon />
+
                         </IconButton>
                         <Typography variant="h6">
                             Fundoo
                         </Typography>
 
-
+                    
                         <SearchIcon id="search-icon" />
-
                         <InputBase placeholder="Search…" className="Search" inputProps={{ 'aria-label': 'search' }} />
 
                         <div className="RefreshAndSettingIcon">
@@ -111,6 +153,7 @@ export default class DashBoard extends Component {
                     </Toolbar>
                 </AppBar>
                  <Divider />
+
                 <div>
                     <Drawer
                         variant="persistent"
@@ -122,7 +165,10 @@ export default class DashBoard extends Component {
                     </Drawer>
 
                 </div>
+                 <div>
+                        <DisplayNotes notes={this.state.notesInDashBoard} />         
 
+                 </div>   
                 
             </div>
 
