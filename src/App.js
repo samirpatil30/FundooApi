@@ -14,7 +14,7 @@ import NoteCard from './components/NoteCard'
 import GetArchiveNotes from './components/GetArchiveNotes'
 import GetTrashNotes from './components/GetTrashNotes'
 import Collaborator from './components/Collaborator'
-// import Reminder from './components/Reminder'
+import NewCard from './components/NewCard'
 
 class App extends Component {
 
@@ -38,7 +38,7 @@ class App extends Component {
                  <Route  path= "/Dashboard/ArchiveNotes" component={ GetArchiveNotes} />
                  <Route  path= "/Dashboard/TrashNotes" component={ GetTrashNotes} />
                 <Route  path= "/Mynotes" component={ NoteCard } />
-                 {/* <Route  path= "/reminder" component={ Reminder} /> */}
+                 <Route  path= "/reminder" component={ NewCard} />
 
         
       </div>

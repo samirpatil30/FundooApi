@@ -45,13 +45,12 @@ export default class DisplayNotes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       notes:[],
+      notes:[],
       showUpdateNotesCard: false,
-      flag: true,
       Title:"dasvfs",
       Description:"dsvds"
     };
-
+    
    
   }
 
@@ -71,9 +70,6 @@ export default class DisplayNotes extends React.Component {
     });
   };
 
-  
-
-
   render() {
 
     console.log(" print all  notes i display Notesss ", this.props.notes);
@@ -83,16 +79,17 @@ export default class DisplayNotes extends React.Component {
       return this.state.showUpdateNotesCard === true ? (
         <div id="Update-Notes">
           <MuiThemeProvider theme={theme}>
-            <Dialog id="Dialog" open={this.state.showUpdateNotesCard}>
+            <Dialog id="Dialog"  open={this.state.showUpdateNotesCard}  >
+             
               <div id="Update-UpdateNotesCardInner">
-                <Card >
+               
                   <div>
                     <div className="Update-NotesTitleAndDesc">
-                      <TextareaAutosize
+                      <TextareaAutosize 
                         id="UpdateNotetitleId"
                         name="notesTitle"
                         value={this.state.Title}
-                        placeholder="Title"
+                        placeholder="NoteTitle"
                         onClick={this.operation}
                       />
                       <EditLocationOutlinedIcon />
@@ -109,7 +106,7 @@ export default class DisplayNotes extends React.Component {
                       <Button>Close</Button>
                     </div>
                   </div>
-                </Card>
+              
               </div>
             </Dialog>
           </MuiThemeProvider>
@@ -119,9 +116,9 @@ export default class DisplayNotes extends React.Component {
       
       (
         <div id="Small-NotesCardInner">
-          <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}>
+          <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}  >
             
-              <div>
+              <div >
                 <div className="Small-NotesTitleAndDesc">
                   <TextareaAutosize
                     id="titleId"
@@ -131,14 +128,16 @@ export default class DisplayNotes extends React.Component {
                     onClick={()=>this.operation(item.notesTitle, item.notesDescription)}
                   />
                   <EditLocationOutlinedIcon />
-                  <TextareaAutosize
+                  <TextareaAutosize 
                     id="DescriptionId"
                     name="notesDescription"
                     value={item.notesDescription}
                     placeholder="Description"
                   />
                 </div>
-
+                  {/* <div>
+                    <h2> {item.color} </h2>
+                  </div> */}
                 <div className="Small-closeButton">
                   <Icons noteid={item} />
                 </div>

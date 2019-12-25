@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import '../css/IconsCSS.css';
 import  AxiosService  from '../service/postData';
 import Collaborator from './Collaborator'
+import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 var axiosObject = new AxiosService;
 export default class Icons extends Component
 {
@@ -97,12 +98,22 @@ export default class Icons extends Component
             <div className="icon-div-flex">
                            { this.state.showCollabrator ?
                                 <Collaborator /> : null}
-                           
-                              <Tooltip title="Archive">
-                              <IconButton size="small" onClick={this.ArchiveNotes} color="black">
-                              <ArchiveIcon fontSize="inherit" />   
+
+                              {this.props.noteid.Archive === false ?   <Tooltip title="Unarchive">
+                              <IconButton  size="small" color="black">
+                              <Badge  color="secondary">
+                              < ArchiveIcon fontSize="inherit"/>
+                              </Badge>
                               </IconButton>
-                              </Tooltip>                          
+                              </Tooltip>
+                          
+                              : <Tooltip title="Archive">
+                              <IconButton size="small" onClick={this.ArchiveNotes} color="black">
+                              <UnarchiveOutlinedIcon fontSize="inherit" />   
+                              </IconButton>
+                              </Tooltip>  }
+
+                                                       
                               
                               <Tooltip title="Reminder">
                               <IconButton  size="small" color="black">
