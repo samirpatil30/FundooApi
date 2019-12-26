@@ -76,8 +76,77 @@ export default class DisplayNotes extends React.Component {
       console.log('notessTitle', this.state.title);
       
     var printNoteList = this.props.notes.map((item, index) => {
-      return this.state.showUpdateNotesCard === true ? (
-        <div id="Update-Notes">
+       return  (
+
+        // <div id="Update-Notes">
+        //   <MuiThemeProvider theme={theme}>
+        //     <Dialog id="Dialog"  open={this.state.showUpdateNotesCard}  >
+             
+        //       <div id="Update-UpdateNotesCardInner">
+               
+        //           <div>
+        //             <div className="Update-NotesTitleAndDesc">
+        //               <TextareaAutosize 
+        //                 id="UpdateNotetitleId"
+        //                 name="notesTitle"
+        //                 value={this.state.Title}
+        //                 placeholder="NoteTitle"
+        //                 onClick={this.operation}
+        //               />
+        //               <EditLocationOutlinedIcon />
+        //               <TextareaAutosize
+        //                 id="UpdateNoteDescriptionId"
+        //                 name="notesDescription"
+        //                 value={this.state.Description}
+        //                 placeholder="Description"
+        //               />
+        //             </div>
+
+        //             <div className="Small-closeButton">
+        //               <Icons noteid={item} />
+        //               <Button>Close</Button>
+        //             </div>
+        //           </div>
+              
+        //       </div>
+        //     </Dialog>
+        //   </MuiThemeProvider>
+        // </div>
+      // ) 
+      
+      
+      // (
+        <div id="Small-NotesCardInner">
+          <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}  >
+            
+              <div >
+                <div className="Small-NotesTitleAndDesc">
+                  <TextareaAutosize
+                    id="titleId"
+                    name="notesTitle"
+                    value={item.notesTitle}
+                    placeholder="Title"
+                    onClick={()=>this.operation(item.notesTitle, item.notesDescription)}
+                  />
+                  <EditLocationOutlinedIcon />
+                  <TextareaAutosize 
+                    id="DescriptionId"
+                    name="notesDescription"
+                    value={item.notesDescription}
+                    placeholder="Description"
+                  />
+                </div>
+                  {/* <div>
+                    <h2> {item.color} </h2>
+                  </div> */}
+                <div className="Small-closeButton">
+                  <Icons noteid={item} />
+                </div>
+              </div>
+            
+          </Card>
+
+           <div id="Update-Notes">
           <MuiThemeProvider theme={theme}>
             <Dialog id="Dialog"  open={this.state.showUpdateNotesCard}  >
              
@@ -111,39 +180,7 @@ export default class DisplayNotes extends React.Component {
             </Dialog>
           </MuiThemeProvider>
         </div>
-      ) 
-      : 
-      
-      (
-        <div id="Small-NotesCardInner">
-          <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}  >
-            
-              <div >
-                <div className="Small-NotesTitleAndDesc">
-                  <TextareaAutosize
-                    id="titleId"
-                    name="notesTitle"
-                    value={item.notesTitle}
-                    placeholder="Title"
-                    onClick={()=>this.operation(item.notesTitle, item.notesDescription)}
-                  />
-                  <EditLocationOutlinedIcon />
-                  <TextareaAutosize 
-                    id="DescriptionId"
-                    name="notesDescription"
-                    value={item.notesDescription}
-                    placeholder="Description"
-                  />
-                </div>
-                  {/* <div>
-                    <h2> {item.color} </h2>
-                  </div> */}
-                <div className="Small-closeButton">
-                  <Icons noteid={item} />
-                </div>
-              </div>
-            
-          </Card>
+
         </div>
       );
     });

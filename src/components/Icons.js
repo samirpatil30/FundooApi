@@ -99,7 +99,7 @@ export default class Icons extends Component
                            { this.state.showCollabrator ?
                                 <Collaborator /> : null}
 
-                              {this.props.noteid.Archive === false ?   <Tooltip title="Unarchive">
+                              {this.props.noteid.Archive === true ?   <Tooltip title="Unarchive">
                               <IconButton  size="small" color="black">
                               <Badge  color="secondary">
                               < ArchiveIcon fontSize="inherit"/>
@@ -136,7 +136,7 @@ export default class Icons extends Component
                               </Tooltip>
                               
 
-                             
+                            {/*                              
                               <Tooltip title="Color" >
                               <IconButton  size="small" color="black">
                               <Badge  color="secondary">
@@ -144,7 +144,7 @@ export default class Icons extends Component
                               </Badge>
                               </IconButton>
                               </Tooltip>
-                                
+                                 */}
                 
 
                               
