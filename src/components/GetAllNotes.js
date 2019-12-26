@@ -49,7 +49,7 @@ export default class GetAllNotes extends Component {
         </div>
 
         <div>
-          <DisplayNotes notes={this.state.getAllNotes}></DisplayNotes>
+          <DisplayNotes notes={this.state.getAllNotes} getMethod={this.getNotesUser}></DisplayNotes>
           {/* <DashBoard notesInDashBoard={this.state.getAllNotes} />          */}
         </div>
       </div>

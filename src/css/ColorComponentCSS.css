@@ -1,0 +1,68 @@
+.paperContent
+{
+    width: 80%;
+   
+}
+.allcolorButtonDiv
+{
+    display: flex;
+    flex-direction: row;
+    
+    padding: 8px;
+}
+ .MuiPaper-root {
+    color: rgba(0, 0, 0, 0.87);
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    background-color: #fff;
+  
+   
+} 
+#redColor
+{
+    background: #e7baba;
+}
+#pinkColor
+{
+    background: #ffffff;
+}
+#yellowColor
+{
+    background: #99929c;
+}
+#brownColor
+{
+    background: #ad5071;
+}
+#grayColor
+{
+    background: #af2a9f;
+}
+#purpleColor
+{
+    background: #15c7f3;
+}
+#darkBlueColor
+{
+    background: #cc6931;
+}
+#oragneColor
+{
+    background: #cad118;
+}
+#whiteColor
+{
+    background: #5ad6d6;
+}
+#blackColor
+{
+    background: #d7aefb;
+}
+#blueColor
+{
+    background: #a94afc;
+} 
+#greenColor
+{
+    background: #79e47e;
+} 
+

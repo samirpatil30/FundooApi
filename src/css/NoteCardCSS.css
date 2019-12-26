@@ -49,6 +49,7 @@ background-color:rgb(255, 255, 255);
 
 #pin
 {
+  position: absolute;
     display: flex;
     justify-self: flex-end;
     width: 22px;

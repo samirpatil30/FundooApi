@@ -80,4 +80,14 @@ export default class AxiosService  {
         console.log("This is get notes service", JwtToken);
         return axios.get(`https://localhost:44313/api/Notes/GetTrashNotes`, {headers:{Authorization: `bearer ${JwtToken}`}})
     }
+
+    GetColorService(data)
+    {
+        var JwtToken = localStorage.getItem('Token')
+        console.log("Axios  Id  ",data.Id)
+        console.log("Axios Color   ",data.color)
+
+        return axios.put("https://localhost:44313/api/Notes/"+data.Id+"/"+data.color+"/color",null,{headers:{Authorization: `bearer ${JwtToken}`}})
+
+    }
 }

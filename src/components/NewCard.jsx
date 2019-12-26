@@ -6,7 +6,7 @@ import EditLocationOutlinedIcon from "@material-ui/icons/EditLocationOutlined";
 render()
 {
   return(
-       <div id="Small-NotesCardInner">
+       <div id="NewSmall-NotesCard">
           <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}  >
             
               <div >

@@ -21,6 +21,7 @@ import Icons from "./Icons";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import EditLocationOutlinedIcon from "@material-ui/icons/EditLocationOutlined";
+import ColorComponent from './ColorCompnent'
 import Dialog from "@material-ui/core/Dialog";
 import "../css/UpdateCardCSS.css";
 
@@ -32,12 +33,7 @@ const theme = createMuiTheme({
       }
     },
 
-    MuiPaper: {
-      elevation24: {
-        boxShadow:
-          "0px 0px 0px 0px rgba(0,0,0,0.2), 0px 2px 7px 1px rgba(0,0,0,0.14), 0px 0px 1px 0px rgba(0,0,0,0.12)"
-      }
-    }
+   
   }
 });
 
@@ -69,6 +65,10 @@ export default class DisplayNotes extends React.Component {
       showUpdateNotesCard: false
     });
   };
+
+  handleSave=() => {
+    this.props.getMethod()
+  }
 
   render() {
 
@@ -117,19 +117,22 @@ export default class DisplayNotes extends React.Component {
       
       // (
         <div id="Small-NotesCardInner">
-          <Card id="CardIdAllNotes" onClick={()=>this.operation(item)}  >
+          <Card id="CardIdAllNotes"   style={{backgroundColor:item.color}} >
             
               <div >
-                <div className="Small-NotesTitleAndDesc">
+                <div className="Small-NotesTitleAndDesc" style={{backgroundColor:item.color}}>
                   <TextareaAutosize
+                  style={{backgroundColor:item.color}}
                     id="titleId"
                     name="notesTitle"
                     value={item.notesTitle}
                     placeholder="Title"
-                    onClick={()=>this.operation(item.notesTitle, item.notesDescription)}
+                    
+                    onClick={()=>this.operation(item)}
                   />
-                  <EditLocationOutlinedIcon />
+               
                   <TextareaAutosize 
+                  style={{backgroundColor:item.color}}
                     id="DescriptionId"
                     name="notesDescription"
                     value={item.notesDescription}
@@ -141,6 +144,7 @@ export default class DisplayNotes extends React.Component {
                   </div> */}
                 <div className="Small-closeButton">
                   <Icons noteid={item} />
+                   <ColorComponent noteId={item.id} ReturnColor={item.color} getNoteMethod= {this.handleSave} />
                 </div>
               </div>
             
@@ -148,8 +152,7 @@ export default class DisplayNotes extends React.Component {
 
            <div id="Update-Notes">
           <MuiThemeProvider theme={theme}>
-            <Dialog id="Dialog"  open={this.state.showUpdateNotesCard}  >
-             
+            <Dialog id="Dialog"  open={this.state.showUpdateNotesCard} >
               <div id="Update-UpdateNotesCardInner">
                
                   <div>
@@ -172,6 +175,7 @@ export default class DisplayNotes extends React.Component {
 
                     <div className="Small-closeButton">
                       <Icons noteid={item} />
+                     
                       <Button>Close</Button>
                     </div>
                   </div>
