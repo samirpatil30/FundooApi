@@ -66,10 +66,10 @@ export  class LogIn extends React.Component{
                     localStorage.setItem('Token', response.data.token)
 
                     if (response.status === 200) {
-                        this.props.history.push('/Dashboard')
+                        this.props.history.push('/Dashboard/notes')
                     }
                     else {
-                        this.props.history.push('/')
+                        this.props.history.push('/login')
                     }
                   })
 
@@ -92,13 +92,13 @@ export  class LogIn extends React.Component{
       const { products} = this.state;
         return(
 
-            <div className="div-log" id="div-id">
+            <div className="div-log">
                
                 <h2>Fundoo</h2>            
                 <h5>SignIn</h5>
                 <label id="label-item"> Use Your Fundoo Account</label>
                 
-   <div>
+             <div>
 <ThemeProvider theme={theme}>
    
     
@@ -131,7 +131,7 @@ export  class LogIn extends React.Component{
       </div>
  
 
- <div className="button" id="ButtonId">
+ <div className="button">
     <Button id="buttonSignIn" onClick={this.logIn} >SignIn</Button>
     <Button id="ForgotId"   onClick={this.ForgotPasswordPage}> ForgotPassword</Button>                 
   </div>   

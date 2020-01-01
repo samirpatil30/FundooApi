@@ -13,8 +13,8 @@ import Icons from './components/Icons';
 import NoteCard from './components/NoteCard'
 import GetArchiveNotes from './components/GetArchiveNotes'
 import GetTrashNotes from './components/GetTrashNotes'
-import Collaborator from './components/Collaborator'
-import NewCard from './components/NewCard'
+import NewReminder from './components/NewReminder'
+// import AddCollabrator from './components/AddCollabrator'
 
 class App extends Component {
 
@@ -26,7 +26,6 @@ class App extends Component {
         <div style={{height: '100%'}}>
           <Toolbar />
       </div>
-
        
                 <Route  path="/login" component={LogIn} />
                 <Route path="/signup" component={SignUp}/>
@@ -38,7 +37,7 @@ class App extends Component {
                  <Route  path= "/Dashboard/ArchiveNotes" component={ GetArchiveNotes} />
                  <Route  path= "/Dashboard/TrashNotes" component={ GetTrashNotes} />
                 <Route  path= "/Mynotes" component={ NoteCard } />
-                 <Route  path= "/reminder" component={ NewCard} />
+                 {/* <Route  path= "/reminder" component={ AddCollabrator} /> */}
 
         
       </div>

@@ -1,0 +1,16 @@
+.dateTimeStyle {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+.reminderStyle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reminderTextStyle {
+  padding: 14px 23px 0px 18px;
+}
+

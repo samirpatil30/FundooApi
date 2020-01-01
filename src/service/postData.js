@@ -7,7 +7,7 @@ export default class AxiosService  {
     loginService(userData)
     {
         console.log(" data in axios service",userData);    
-        return axios.post(this.url+'/api/Account/login',  userData)
+        return axios.post('https://localhost:44313/api/Account/login',  userData)
     }
      
 
@@ -89,5 +89,48 @@ export default class AxiosService  {
 
         return axios.put("https://localhost:44313/api/Notes/"+data.Id+"/"+data.color+"/color",null,{headers:{Authorization: `bearer ${JwtToken}`}})
 
+    }
+
+    AddCollabratorService(data)
+    {
+         var JwtToken = localStorage.getItem('Token');
+        var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+        console.log('Colabrator data in axios', data.list, data.id);
+        
+         axios.post("https://localhost:44313/api/Notes/"+data.list+"/"+data.Id+"/CollabrateNotes", null, header);
+    }
+
+    AddReminderService(DatetimeData)
+    {
+        var JwtToken = localStorage.getItem('Token');
+        var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+        console.log('Add Reminder Axios', DatetimeData.dateAndTime, DatetimeData.Id,new Date());   
+       return axios.post("https://localhost:44313/api/Notes/"+DatetimeData.Id+"/Reminder", DatetimeData,header);
+    }
+  
+  AddLabelWithoutNoteService(data)
+  {
+        var JwtToken = localStorage.getItem('Token');
+        var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+
+        console.log('Label in axios', data.EditLabel)
+      return axios.post("https:/localhost:44313/api/Label/"+data.EditLabel+"/Add", null, header);
+  }
+
+    GetLabelService()
+    {
+        console.log("GetNotesService");
+        
+        var JwtToken = localStorage.getItem('Token')
+        console.log("This is get notes service", JwtToken);
+        return axios.get(`https://localhost:44313/api/Label`, {headers:{Authorization: `bearer ${JwtToken}`}})
+    }
+
+    DeleteLabelService(id)
+    {
+        var JwtToken = localStorage.getItem('Token')
+        var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+
+        return axios.delete(`https://localhost:44313/api/Label/${id}`)
     }
 }

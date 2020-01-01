@@ -44,3 +44,11 @@ border: none;
 .MuiDialog-paperWidthSm {
     max-width: 414px !important;
 }
+
+.save-cancel-div
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+

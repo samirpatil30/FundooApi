@@ -5,12 +5,28 @@ import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import { ThemeProvider ,createMuiTheme} from '@material-ui/core'
 import  AxiosService  from '../service/postData';
-
+import "../css/ForgotPasswordCSS.css";
 
 const theme = createMuiTheme({
    
-});
+    overrides:{
+        MuiInputLabel:{
+            formControl:{
+                top:"-9px",
+                left:"9%"
+            }
+        },
 
+
+        MuiInputBase:{
+            root:{
+                height:"35px",
+                width:"80%",
+                left:"10%"
+            }
+        }
+    }
+  });
 var forgotService= new AxiosService;
 export class ForgotPassword extends Component{
     constructor(props)
@@ -45,7 +61,7 @@ export class ForgotPassword extends Component{
 
       return(
 
-          <div className="forgot" id="div-id">
+          <div className="div-log" id="div-id">
              
               <h2>Fundoo</h2>            
               <h5>Account Recovery</h5>
@@ -55,7 +71,7 @@ export class ForgotPassword extends Component{
                 <ThemeProvider theme={theme}>
  
                     <TextField 
-                        id="text-log-in"
+                        id="text-log"
                         label="Email"
                         name="email"  
                         onChange={this.onchange}         

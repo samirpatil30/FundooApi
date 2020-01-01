@@ -65,7 +65,9 @@ z-index: 4000;
   min-height: 40%;
 }
 
-
+.MuiAvatar-root {
+    width: 22px !important;
+    height: 21px !important}
 
 /* #UpdateCard
 {

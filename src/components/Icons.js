@@ -16,8 +16,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import '../css/IconsCSS.css';
 import  AxiosService  from '../service/postData';
-import Collaborator from './Collaborator'
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
+
+
 var axiosObject = new AxiosService;
 export default class Icons extends Component
 {
@@ -30,7 +31,6 @@ export default class Icons extends Component
         }
         
     //console.log('this is delete note prop', this.props)
-
         this.handleClick=this.handleClick.bind(this)
 
     }
@@ -45,20 +45,20 @@ export default class Icons extends Component
       
       };
 
-    ArchiveNotes=()=> {
-           // console.log('this is delete note function', this.props )
-    var id=   this.props.noteid.id
-     console.log('Archive note id in Archive()',id)
+    // ArchiveNotes=()=> {
+    //        // console.log('this is delete note function', this.props )
+    // var id=   this.props.noteid.id
+    //  console.log('Archive note id in Archive()',id)
     
    
-              axiosObject.ArchiveNotesService(id).then(response=>{
-                 console.log(" response in ",response);
-                  })
+    //           axiosObject.ArchiveNotesService(id).then(response=>{
+    //              console.log(" response in ",response);
+    //               })
 
-            .catch(error => {
-            console.log('def',error.response)
-            });
-    }
+    //         .catch(error => {
+    //         console.log('def',error.response)
+    //         });
+    // }
 
 
   DeleteNote=()=>{
@@ -70,6 +70,7 @@ export default class Icons extends Component
    
            axiosObject.TrashNotesService(id).then(response=>{
          console.log(" response in ",response);
+          this.props.getNoteMethod()
    })
 
    .catch(error => {
@@ -83,12 +84,12 @@ export default class Icons extends Component
     console.log(this.state);
   }
 
-  openCollabrator=() =>
-  {
-    this.setState({
-      showCollabrator: !this.state.showCollabrator
-    })
-  }
+  // openCollabrator=() =>
+  // {
+  //   this.setState({
+  //     showCollabrator: !this.state.showCollabrator
+  //   })
+  // }
     render(){
       console.log('Iconss',this.props.noteid);
       
@@ -96,7 +97,7 @@ export default class Icons extends Component
         return(
           
             <div className="icon-div-flex">
-                           { this.state.showCollabrator ?
+                           {/* { this.state.showCollabrator ?
                                 <Collaborator /> : null}
 
                               {this.props.noteid.Archive === true ?   <Tooltip title="Unarchive">
@@ -111,50 +112,16 @@ export default class Icons extends Component
                               <IconButton size="small" onClick={this.ArchiveNotes} color="black">
                               <UnarchiveOutlinedIcon fontSize="inherit" />   
                               </IconButton>
-                              </Tooltip>  }
+                              </Tooltip>  } */}
 
-                                                       
-                              
-                              <Tooltip title="Reminder">
-                              <IconButton  size="small" color="black">
-                              <Badge  color="secondary">
-                              < AccessAlarmsIcon fontSize="inherit"/>
-                              </Badge>
-                              </IconButton>
-                              </Tooltip>
-                          
-                              
-                              
-                            
-                              <Tooltip title="Collaborate" >
-                              <IconButton  size="small" color="black" onClick={this.openCollabrator}>
-                               
-                              <Badge  color="secondary">
-                              <PersonAddIcon fontSize="inherit" />
-                              </Badge>
-                              </IconButton>
-                              </Tooltip>
-                              
-
-                            {/*                              
-                              <Tooltip title="Color" >
-                              <IconButton  size="small" color="black">
-                              <Badge  color="secondary">
-                              <PaletteIcon fontSize="inherit" />
-                              </Badge>
-                              </IconButton>
-                              </Tooltip>
-                                 */}
-                
-
-                              
+{/*                               
                               <Tooltip title="Image">
                               <IconButton  size="small" color="black">
                               <Badge  color="secondary">
                               <ImageIcon fontSize="inherit" />
                               </Badge>
                               </IconButton>
-                              </Tooltip>
+                              </Tooltip> */}
                                   
 
      
