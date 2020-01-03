@@ -67,8 +67,28 @@ z-index: 4000;
 
 .MuiAvatar-root {
     width: 22px !important;
-    height: 21px !important}
+    height: 21px !important
+}
 
+#Icons
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.Image
+{
+    width: 100%;
+}
+
+img {
+    height: 100% !important;
+    width: 100% !important;
+    vertical-align: middle !important;
+    border-style: none !important;
+}
 /* #UpdateCard
 {
     width: 90%;

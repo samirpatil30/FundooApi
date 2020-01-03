@@ -29,7 +29,7 @@ import Icons from './Icons'
 import '../css/NotesCSS.css';
 
 import AxiosService from '../service/postData';
-
+import ArchiveComponent from "./ArchiveComponent";
 var jwtDecode = require('jwt-decode');
 var addnotes = new AxiosService;
 const theme = createMuiTheme({
@@ -144,7 +144,12 @@ export default class Notes extends Component
                               < div className="TextField2">
                                   <TextareaAutosize className="take-note" name="notesDescription" onChange={this.onchange} aria-multiline="true" aria-label="empty textarea" placeholder="Take A Note" />                                   
                                    <div className="Button"> 
-                                    <Icons />                                                
+                                   
+                                   <div>
+                                     
+                                    <Icons />
+                                     
+                                    </div>                                                
                                     <Button className="CloseButton" onClick={this.AddNotes}>close</Button> 
                                    </div>                                                                    
                               </div >

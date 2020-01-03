@@ -45,21 +45,6 @@ export default class Icons extends Component
       
       };
 
-    // ArchiveNotes=()=> {
-    //        // console.log('this is delete note function', this.props )
-    // var id=   this.props.noteid.id
-    //  console.log('Archive note id in Archive()',id)
-    
-   
-    //           axiosObject.ArchiveNotesService(id).then(response=>{
-    //              console.log(" response in ",response);
-    //               })
-
-    //         .catch(error => {
-    //         console.log('def',error.response)
-    //         });
-    // }
-
 
   DeleteNote=()=>{
   
@@ -84,12 +69,6 @@ export default class Icons extends Component
     console.log(this.state);
   }
 
-  // openCollabrator=() =>
-  // {
-  //   this.setState({
-  //     showCollabrator: !this.state.showCollabrator
-  //   })
-  // }
     render(){
       console.log('Iconss',this.props.noteid);
       

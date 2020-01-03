@@ -9,3 +9,12 @@
   height: 40px;
 
 }
+#span-id-label
+{ 
+    text-transform: capitalize;
+}
+
+#DeleteIcon
+{
+  margin-top: 15px;
+}

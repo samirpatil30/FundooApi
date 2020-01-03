@@ -247,7 +247,6 @@ export default class NewCollabrator extends React.Component {
     return (
       <div>
 
-        <br />
         <Tooltip title="Collaborate" enterDelay={250} leaveDelay={100}>
           <IconButton size="small" color="black" onClick={this.handleClickOpen}>
             <Badge color="secondary">

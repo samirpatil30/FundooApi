@@ -18,11 +18,14 @@ ArchiveNotes=()=> {
    
               axiosObject.ArchiveNotesService(id).then(response=>{
                  console.log(" response in ",response);
+                       this.props.getNoteMethod()
                   })
 
             .catch(error => {
             console.log('def',error.response)
             });
+
+
     }
 
 
@@ -31,7 +34,7 @@ ArchiveNotes=()=> {
     return(
       <div className="Archive-top-div">
 
-       {this.props.noteid.Archive === true ?   <Tooltip title="Unarchive">
+       {this.props.noteid.Archive === true ?   <Tooltip title="Archive">
                               <IconButton  size="small" color="black">
                               <Badge  color="secondary">
                               < ArchiveIcon fontSize="inherit"/>
@@ -41,7 +44,7 @@ ArchiveNotes=()=> {
                           
                               : <Tooltip title="Archive">
                               <IconButton size="small" onClick={this.ArchiveNotes} color="black">
-                              <UnarchiveOutlinedIcon fontSize="inherit" />   
+                              <ArchiveIcon fontSize="inherit" />   
                               </IconButton>
                               </Tooltip>  }
       </div>

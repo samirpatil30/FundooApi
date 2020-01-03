@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import '../css/getAllNotesCSS.css';
 import  AxiosService  from '../service/postData';
 import { Button, TextField, IconButton } from '@material-ui/core';
-
 import DashBoard from './DashBoard'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -86,8 +85,8 @@ export default class EditLabel extends Component {
         console.log("this is Id of label ", this.props.labelId);
         return (
             <div>
-             <IconButton onClick={this.DeleteLabelData}>
-            <DeleteIcon />
+             <IconButton size="small" onClick={this.DeleteLabelData}>
+            <DeleteIcon fontSize="inherit" id="DeleteIcon" />
            </IconButton>
                 <TextField
                     id="standard-name"
@@ -95,8 +94,8 @@ export default class EditLabel extends Component {
                     onChange={this.handleChange('name')}
                     margin="normal"
                 />
-                <IconButton onClick={this.EditLabelData}>
-                    <EditIcon />
+                <IconButton size="small" onClick={this.EditLabelData}>
+                    <EditIcon fontSize="inherit" id="DeleteIcon"/>
                 </IconButton>
                 <div>
                 </div>
