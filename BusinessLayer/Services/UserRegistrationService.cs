@@ -40,21 +40,21 @@ namespace BusinessLayer.Services
         /// <param name="user">The user.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">User is empty</exception>
-        public async Task<bool> AddUserDetails(UserDetails user)
+        public async Task<UserDetails> AddUserDetails(UserDetails user)
         {
             try
             {
                 //// If user the user details is empty or not 
                 if (user != null)
                 {
-                    var result = await _registration.AddUserDetails(user);
-                    if (result != false)
+                    UserDetails result = await _registration.AddUserDetails(user);
+                    if (result != null )
                     {
-                        return true;
+                        return result;
                     }
                     else
                     {
-                        return false;
+                       throw new Exception("Unable to register");
                     }
                 }
                 else
@@ -74,26 +74,29 @@ namespace BusinessLayer.Services
         /// <param name="loginModel">login model.</param>
         /// <returns>LoginResult</returns>
         /// <exception cref="NotImplementedException">exception</exception>
-        public async Task<Tuple<string, string>> Login(LoginModel loginModel)
+        public async Task<UserDetails> Login(LoginModel loginModel)
         {
             try
             {
-                //// If checks login details is empty or not 
-                if (loginModel != null)
+              
+                ///if loginModel is not null it will return result else throw the exception
+                if (!loginModel.Equals(null))
                 {
-                    var loginResult = await this._registration.Login(loginModel);
-                    return Tuple.Create(loginResult.Item1, "Login Successful");
+                    var result = await this._registration.Login(loginModel);
+
+                    return result;
                 }
                 else
                 {
-                    throw new Exception("User is empty");
+                    throw new Exception("login model is null");
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                throw exception;
+                throw new Exception(ex.Message);
             }
         }
+
 
         /// <summary>
         /// Forgot the password.
@@ -108,7 +111,8 @@ namespace BusinessLayer.Services
                 //// If checks passwordModel details is empty or not 
                 if (passwordModel != null)
                 {
-                    return await this._registration.ForgotPassword(passwordModel);
+                    var result= await this._registration.ForgotPassword(passwordModel);
+                    return result;
                 }
                 else
                 {
@@ -128,7 +132,7 @@ namespace BusinessLayer.Services
         /// <param name="tokenString">token string.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">User Email is not valid</exception>
-        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel)
+        public async Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
             {
@@ -139,13 +143,13 @@ namespace BusinessLayer.Services
                    var result = await this._registration.ResetPassword(resetPasswordModel);
 
                     //// If checks result is null or not
-                    if (result != null)
+                    if (result != false)
                     {
-                        return Tuple.Create(true, "Password Has Been change");
+                        return result;
                     }
                     else
                     {
-                        return Tuple.Create(true, "Password Has not Been change");
+                        return false;
                     }
                 }
                 else

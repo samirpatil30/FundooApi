@@ -23,14 +23,14 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="user">The user.</param>
         /// <returns>user</returns>
-      Task<bool> AddUserDetails(UserDetails user);
+      Task<UserDetails> AddUserDetails(UserDetails user);
 
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns>loginModel</returns>
-        Task<Tuple<string, string>> Login(LoginModel loginModel);
+        Task<UserDetails> Login(LoginModel loginModel);
 
         /// <summary>
         /// Forgot the password.
@@ -45,7 +45,7 @@ namespace RepositoryLayer.Interface
         /// <param name="resetPasswordModel">The reset password model.</param>
         /// <param name="tokenString">The token string.</param>
         /// <returns>resetPasswordModel</returns>
-        Task<Tuple<bool,string>> ResetPassword(ResetPasswordModel resetPasswordModel);
+        Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
 
         /// <summary>
         /// Profiles the picture.

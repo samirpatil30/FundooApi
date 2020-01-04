@@ -64,14 +64,14 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns>User id</returns>
-        public IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage )
+        public IList<NotesModel> GetNotes(int userId)
         {
             try
             {
                 //// if checks the model is Null or not
                // if (UserId != null)
                 //{
-                    var result = this._notesRepository.GetNotes(userId, pageNumber, NotePerPage);
+                    var result = this._notesRepository.GetNotes(userId);
                     return result;
                // }
                // else
@@ -186,11 +186,11 @@ namespace BusinessLayer.Services
         /// <param name="id">The identifier.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">Note is not found select the correct note</exception>
-        public async Task<bool> Archive(int id)
+        public async Task<bool> Archive(int id, int UserId)
         {           
             try
             {
-                var result = await this._notesRepository.Archive(id);
+                var result = await this._notesRepository.Archive(id, UserId);
                 if (id != 0)
                 {
                     return result;
@@ -241,18 +241,18 @@ namespace BusinessLayer.Services
         /// <param name="id">The identifier.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">Unable to trash note</exception>
-        public async Task<bool> Trash(int id)
+        public async Task<bool> Trash(int id,int UserId)
         {
             try
             {
-                var result = await this._notesRepository.Trash(id);
+                var result = await this._notesRepository.Trash(id, UserId);
                 if (id != 0)
                 {
                     return result;
                 }
                 else
                 {
-                    throw new Exception("Unable to trash note");
+                    throw new Exception("Notes Not Found");
                 }
             }
             catch (Exception exception)
@@ -260,6 +260,8 @@ namespace BusinessLayer.Services
                 throw exception;
             }
         }
+    
+
 
         /// <summary>
         /// Un trash.
@@ -304,7 +306,7 @@ namespace BusinessLayer.Services
                 }
                 else
                 {
-                    throw new Exception("Unable to pin note");
+                    throw new Exception("Notes Not Found");
                 }
             }
             catch (Exception exception)
@@ -312,7 +314,7 @@ namespace BusinessLayer.Services
                 throw exception;
             }
         }
-
+       
         /// <summary>
         /// Un pin.
         /// </summary>
@@ -346,11 +348,11 @@ namespace BusinessLayer.Services
         /// <param name="time">time.</param>
         /// <returns>result</returns>
         /// <exception cref="Exception">add reminder failed</exception>
-        public async Task<bool> AddReminder(int id, DateTime time)
+        public async Task<bool> AddReminder(int id, NotesModel time, int UserId)
         {
             try
             {
-                var result = await this._notesRepository.AddReminder(id, time);
+                var result = await this._notesRepository.AddReminder(id, time, UserId);
                 if (result != false)
                 {
                     return result;
@@ -469,22 +471,76 @@ namespace BusinessLayer.Services
         }
 
         /// <summary>
-        /// Searches the specified note.
+        /// Get Notes
         /// </summary>
-        /// <param name="note">The note.</param>
-        /// <returns>note</returns>
-        /// <exception cref="Exception"></exception>
-        //public IList<NotesModel> Search(string note)
-        //{
-        //    try
-        //    {
-        //       return this._notesRepository.Search(note);
+        /// <param name="model"></param>
+        /// <returns>User id</returns>
+        public IList<NotesModel> GetArchiveNotes(int userId)
 
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new Exception(exception.Message);
-        //    }
-        //}
+        {
+            try
+            {
+                //// if checks the model is Null or not
+                // if (UserId != null)
+                //{
+                var result = this._notesRepository.GetArchiveNotes(userId);
+                return result;
+                // }
+                // else
+                //{
+                throw new Exception("Invalid User id");
+                // }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        /// <summary>
+        /// Gets the trash notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Invalid User id</exception>
+        public  IList<NotesModel> GetTrashNotes(int userId)
+        {
+            try
+            {
+                //// if checks the model is Null or not
+                // if (UserId != null)
+                //{
+                var result =  this._notesRepository.GetTrashNotes(userId);
+                return result;
+                // }
+                // else
+                //{
+                throw new Exception("Invalid User id");
+                // }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public bool ColorService(ColorModel data)
+        {
+            try
+            {
+                if (data.UserId != null)
+                {
+                    return _notesRepository.ColorService(data);
+                }
+                else
+                {
+                    throw new Exception("Note color Not Change");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
     }
 }

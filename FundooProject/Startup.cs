@@ -12,6 +12,7 @@ namespace FundooProject
     using BusinessLayer.Services;
     using CommanLayer.Model;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -79,6 +80,14 @@ namespace FundooProject
                 options.Password.RequiredLength = 4;
             });
 
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
+                    .RequireAuthenticatedUser().Build());
+            });
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -86,7 +95,6 @@ namespace FundooProject
                 
             }).AddJwtBearer(g =>
             {
-           
                 g.RequireHttpsMetadata = false;
                 g.SaveToken = true;
                 g.TokenValidationParameters = new TokenValidationParameters
@@ -95,7 +103,7 @@ namespace FundooProject
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"].ToString())),
                 };
             });
 
@@ -160,7 +168,8 @@ namespace FundooProject
             
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+       
+              app.UseHttpsRedirection();
             app.UseMvc();
         }
            

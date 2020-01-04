@@ -35,7 +35,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="userId">user Id</param>
         /// <returns>result</returns>
-        IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage);
+        IList<LabelModel> GetLabel(int userId);
 
         /// <summary>
         /// Delete Label
@@ -44,5 +44,7 @@ namespace BusinessLayer.Interface
         /// <param name="id">id</param>
         /// <returns>result</returns>
         Task<bool> DeleteLabel(int id);
+
+        Task<LabelModel> AddLabelWithoutNoteId(string label, string UserId);
     }
 }

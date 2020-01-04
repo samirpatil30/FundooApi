@@ -78,41 +78,8 @@ namespace FundoTestProject.Account
             Assert.NotNull(data);
         }
 
-        /// <summary>
-        /// Resets the password.
-        /// </summary>
-        [Fact]
-        public void ResetPassword()
-        {
-            var Repository = new Mock<IUserRegistraionRepository>();
-            var Business = new UserRegistrationService(Repository.Object);
-            var model = new ResetPasswordModel()
-            {
-                Password = "Password"
-            };
 
-            var data = Business.ResetPassword(model, "Reset Password");
-            Assert.NotNull(data);
-        }
-
-        [Fact]
-        public void AdminRegistration()
-        {
-            var Repository = new Mock<IUserRegistraionRepository>();
-            var Business = new UserRegistrationService(Repository.Object);
-            var model = new UserDetails()
-            {
-                FirstName = "Manoj",
-                LastName = "Pawane",
-                UserName = "manoj123",
-                Email = "manoj123@gmail.com",
-                Password = "manoj123",
-                ProfilePicuture = "assassinscredd.jpeg"
-            };
-
-            var data = Business.AdminRegistration(model);
-            Assert.NotNull(data);            
-        }
+       
 
         [Fact]
         public void AdminLogin()

@@ -88,16 +88,15 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>userId</returns>
-        public IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage)
+        public IList<LabelModel> GetLabel(int userId)
         {
             try
             {
                 //// Here checked userId contains information or not 
                 if (userId > 0)
                 {
-                   var result = this._repositoryManager.GetLabel(userId, pageNumber, LabelPerPage);
-                    return result;
-                   
+                   var result = this._repositoryManager.GetLabel(userId);
+                    return result; 
                 }
                 else
                 {
@@ -130,6 +129,25 @@ namespace BusinessLayer.Services
                 else
                 {
                     throw new Exception("label are not deleted");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
+        public Task<LabelModel> AddLabelWithoutNoteId(string label, string UserId)
+        {
+            try
+            {
+                if (label != null)
+                {
+                    return this._repositoryManager.AddLabelWithoutNoteId(label, UserId);
+                }
+                else
+                {
+                    throw new Exception("Empty");
                 }
             }
             catch (Exception exception)

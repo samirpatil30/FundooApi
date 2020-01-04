@@ -30,7 +30,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="UserId">UserId</param>
         /// <returns>user id</returns>
-        IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage );
+        IList<NotesModel> GetNotes(int userId );
 
         /// <summary>
         /// Update Notes
@@ -62,7 +62,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>id</returns>
-        Task<bool> Archive(int id);
+        Task<bool> Archive(int id, int UserId);
 
         /// <summary>
         /// Un archive.
@@ -76,7 +76,7 @@ namespace BusinessLayer.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>id</returns>
-        Task<bool> Trash(int id);
+        Task<bool> Trash(int id,int UserId);
 
         /// <summary>
         /// Un trash.
@@ -105,7 +105,7 @@ namespace BusinessLayer.Interface
         /// <param name="id">The identifier.</param>
         /// <param name="time">The time.</param>
         /// <returns>id, time</returns>
-        Task<bool> AddReminder(int id, DateTime time);
+        Task<bool> AddReminder(int id, NotesModel time, int UserId);
 
         /// <summary>
         /// Delete reminder.
@@ -124,5 +124,11 @@ namespace BusinessLayer.Interface
         Task<bool> BulkTrash(IList<int> id);
 
         IList<NotesModel> Search(string word, int UserId);
+
+        IList<NotesModel> GetArchiveNotes(int userId);
+
+        IList<NotesModel> GetTrashNotes(int userId);
+
+        bool ColorService(ColorModel data);
     }
 }

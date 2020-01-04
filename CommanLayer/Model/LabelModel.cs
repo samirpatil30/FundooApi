@@ -23,6 +23,7 @@ namespace CommanLayer.Model
         /// </value>
         public int Id { get; set; }
 
+        public int LabelId { get; set; }
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>

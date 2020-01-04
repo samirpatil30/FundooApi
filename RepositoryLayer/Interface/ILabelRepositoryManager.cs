@@ -35,7 +35,7 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns>userId</returns>
-        IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage);
+        IList<LabelModel> GetLabel(int userId);
 
         /// <summary>
         /// Deletes the label.
@@ -44,5 +44,7 @@ namespace RepositoryLayer.Interface
         /// <param name="id">The identifier.</param>
         /// <returns>labelModel</returns>
         Task<bool> DeleteLabel( int id);
+
+        Task<LabelModel> AddLabelWithoutNoteId(string label, string UserId);
     }
 }

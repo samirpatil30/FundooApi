@@ -57,7 +57,7 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="user">user</param>
         /// <returns>Userdetails</returns>
-        public async Task<bool> AddUserDetails(UserDetails userDetail)
+        public async Task<UserDetails> AddUserDetails(UserDetails userDetail)
         {
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
             try
@@ -77,17 +77,15 @@ namespace RepositoryLayer.Services
                 int row = await sqlcommand.ExecuteNonQueryAsync();
                 if (row > 0)
                 {
-                    return true;
-                    
+                    return userDetail;                   
                 }
                 else
                 {
-                    return false;
+                    throw new Exception("Unable to register");
                 }
             }
             catch (Exception e)
             {
-
                 throw e;
             }
             finally
@@ -96,61 +94,45 @@ namespace RepositoryLayer.Services
             }
         }
 
-        
+
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns>loginModel</returns>
-        public async Task<Tuple<string, string>> Login(LoginModel loginModel)
-         {
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SelectUserDetails", con);           
-            sqlCommand.CommandType =  CommandType.StoredProcedure;
-            con.Open();
-            sqlCommand.Parameters.AddWithValue("@Email",loginModel.Email);
-            SqlDataReader dataReader = sqlCommand.ExecuteReader();
-            
+        public async Task<UserDetails> Login(LoginModel loginModel)
+        {
+            SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            //// it confirms that user is avaiable in database or not
+            ///var user = await _userManager.FindByNameAsync(loginModel.UserName);
 
-            while (dataReader.Read())
+            SqlCommand sqlCommand = new SqlCommand("SelectUserDetails", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@Email", loginModel.Email);
+            sqlCommand.Parameters.AddWithValue("@Password", loginModel.Password);
+
+            sqlConnection.Open();
+
+            SqlDataReader sdr =  sqlCommand.ExecuteReader();
+            // RegistrationModel user = new RegistrationModel();
+
+            UserDetails userModel= null;
+            while (sdr.Read())
             {
-                userTypeData = new UserDetails();
-                userTypeData.Email = dataReader["Email"].ToString();
-                userTypeData.Password = dataReader["Password"].ToString();
-                userTypeData.id =  Convert.ToInt32(dataReader["Id"].ToString());
+                userModel = new UserDetails();
+                userModel.FirstName = sdr["FirstName"].ToString();
+                userModel.LastName = sdr["LastName"].ToString();
+                userModel.UserName = sdr["UserName"].ToString();
+                userModel.id = (int)sdr["Id"];
+                userModel.ServiceId = sdr["ServiceType"].ToString();
+                userModel.UserType = sdr["UserType"].ToString();
+                userModel.Email = sdr["Email"].ToString();
+                userModel.ProfilePicture = sdr["Profilepicture"].ToString();
             }
+            sdr.Close();
 
+            return userModel;
 
-                 //// check the username and password is matched in database or not
-             if (userTypeData.Email == loginModel.Email && userTypeData.Password == loginModel.Password)
-             {
-                string key = "This is my SecretKey which is used for security purpose";
-
-                ////Here generate encrypted key and result store in security key
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-
-                //// here using securitykey and algorithm(security) the creadintails is generate(SigningCredentials present in Token)
-                var creadintials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-                var claims = new[]
-                {
-                    new Claim("Email", userTypeData.Email),
-                    new Claim("Id", userTypeData.id.ToString()),
-                };
-
-                var token = new JwtSecurityToken("Security token", "https://Test.com",
-                    claims,
-                    DateTime.UtcNow,
-                    expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creadintials);
-
-                var NewToken =  new JwtSecurityTokenHandler().WriteToken(token);
-                return Tuple.Create(NewToken, "User Login Successful");
-            }
-            else
-            {
-                return Tuple.Create("Token is not generated", "Invalid User");
-            }
         }
 
         /// <summary>
@@ -226,7 +208,7 @@ namespace RepositoryLayer.Services
         /// <param name="resetPasswordModel"></param>
         /// <param name="tokenString">tokenString</param>
         /// <returns>resetPasswordModel</returns>
-        public async Task<Tuple<bool, string>> ResetPassword(ResetPasswordModel resetPasswordModel)
+        public async Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             var token = new JwtSecurityToken(resetPasswordModel.token);
 
@@ -243,11 +225,11 @@ namespace RepositoryLayer.Services
             if (Email != null)
             {
               var result = await sqlCommand.ExecuteNonQueryAsync();
-                return Tuple.Create(true, "Password has been updated");
+                return true;
             }
             else
             {
-                return Tuple.Create(false, "User is not Exist ");
+                return false;
             }
         }
 

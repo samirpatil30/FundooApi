@@ -131,7 +131,7 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="userId">userId</param>
         /// <returns>list</returns>
-        public IList<LabelModel> GetLabel(int userId, int pageNumber, int LabelPerPage)
+        public IList<LabelModel> GetLabel(int userId)
         {
             try
             {
@@ -156,24 +156,24 @@ namespace RepositoryLayer.Services
 
                 //// Here the Linq querey return the Record match in Database
 
-                int count = list.Count();
-                int CurrentPage = pageNumber;
-                int PageSize = LabelPerPage;
-                int TotalCount = count;
+                //int count = list.Count();
+                //int CurrentPage = pageNumber;
+                //int PageSize = LabelPerPage;
+                //int TotalCount = count;
 
-                // Calculating Totalpage by Dividing (No of Records / Pagesize)  
-                int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
-                var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+                //// Calculating Totalpage by Dividing (No of Records / Pagesize)  
+                //int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
+                //var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
 
-                var paginationMetadata = new
-                {
-                    totalCount = TotalCount,
-                    pageSize = PageSize,
-                    currentPage = CurrentPage,
-                    totalPages = TotalPages,
-                };
+                //var paginationMetadata = new
+                //{
+                //    totalCount = TotalCount,
+                //    pageSize = PageSize,
+                //    currentPage = CurrentPage,
+                //    totalPages = TotalPages,
+                //};
 
-                return items.ToList();
+                return list;
             }
             catch(Exception exception)
             {
@@ -206,5 +206,45 @@ namespace RepositoryLayer.Services
                 return false;
             }
         }
+
+        public async Task<LabelModel> AddLabelWithoutNoteId(string label, string UserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                LabelModel userList = new LabelModel();
+              
+                    SqlCommand sqlCommand = new SqlCommand("CreateLabelWithoutNoteId", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@NoteId", 0);
+                    sqlCommand.Parameters.AddWithValue("@UserId", UserId);
+                    sqlCommand.Parameters.AddWithValue("@Label", label);
+
+                    sqlConnection.Open();
+                   // await sqlCommand.ExecuteNonQueryAsync();
+
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                   
+                    while (reader.Read())
+                    {
+                        ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+
+                        userList.Id = Convert.ToInt32(reader["Id"]);
+                        userList.UserId = Convert.ToInt32(reader["UserId"].ToString());
+                        userList.Label = reader["Label"].ToString();
+                    }
+                    sqlConnection.Close();
+
+                
+
+                return userList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }

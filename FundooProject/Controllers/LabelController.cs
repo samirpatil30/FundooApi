@@ -6,20 +6,25 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace FundooProject.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using BusinessLayer.Interface;
     using CommanLayer.Model;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// LabelController
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+     [EnableCors("CorsPolicy")]
     [Route("api/[controller]")]
-   ////[ApiController]
+   [ApiController]
     [Authorize]
+
     public class LabelController : ControllerBase
     {
         /// <summary>
@@ -67,9 +72,10 @@ namespace FundooProject.Controllers
         /// <param name="userId">The user identifier.</param>
         /// <returns>result</returns>
         [HttpGet]
-        public IActionResult GetLabel(int userId, int pageNumber, int LabelPerPage)
+        public IActionResult GetLabel()
         {
-            var result = this._bussinessManager.GetLabel(userId, pageNumber,LabelPerPage);
+            var userId = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == "Id").Value);
+            var result = this._bussinessManager.GetLabel(userId);
             return this.Ok(new { result });
         }
 
@@ -80,10 +86,36 @@ namespace FundooProject.Controllers
         /// <param name="id">The identifier.</param>
         /// <returns>result</returns>
         [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteLabel(int id)
         {
+            var userId = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == "Id").Value);
             var result = await this._bussinessManager.DeleteLabel(id);
             return this.Ok(new { result });
+        }
+
+        [HttpPost]
+        [Route("{label}/Add")]
+        public async Task<IActionResult> AddLabel(string label)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "Id").Value;
+                var results = await this._bussinessManager.AddLabelWithoutNoteId(label, userId);
+                if (results != null)
+                {
+                    return Ok(new { status = true, message = "Added Successfully", data = results });
+                }
+                else
+                {
+                    return BadRequest(new { status = false, message = " Failed ", data = "" });
+                }
+            }
+            catch(Exception exception)
+            {
+                throw exception;
+            }
+            
         }
     }
 }

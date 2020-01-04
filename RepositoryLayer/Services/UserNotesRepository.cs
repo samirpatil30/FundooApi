@@ -63,7 +63,7 @@ namespace RepositoryLayer.Services
                 // sqlcommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
                 //sqlcommand.Parameters.AddWithValue("@ModifiedDate", DateTime.Now);
                 sqlcommand.Parameters.AddWithValue("@color", notesModel.color);
-                sqlcommand.Parameters.AddWithValue("@Reminder", SqlDateTime.Null);
+                sqlcommand.Parameters.AddWithValue("@Reminder", SqlDateTime.MinValue);
                 sqlcommand.Parameters.AddWithValue("@Image", notesModel.Image);
                 sqlcommand.Parameters.AddWithValue("@Trash", notesModel.Trash);
                 sqlcommand.Parameters.AddWithValue("@Archive", notesModel.Archive);
@@ -95,99 +95,79 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="model">model</param>
         /// <returns>UserID</returns>
-        public IList<NotesModel> GetNotes(int userId,  int pageNumber, int NotePerPage)
+        public IList<NotesModel> GetNotes(int userId)
         {
-            IList<NotesModel> list = new List<NotesModel>(); 
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SpGetNotes", con);
-            con.Open();
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("UserId", userId);
-            SqlDataReader dataReader = sqlCommand.ExecuteReader();
-            NotesModel notesModel ;
-            while (dataReader.Read())
+            IList<NotesModel> notesModel = new List<NotesModel>();
+            try
             {
-                 notesModel = new NotesModel()
-                { 
-                   UserId = userId   ,
-                   NotesTitle = dataReader["NotesTitle"].ToString(),
-                   NotesDescription = dataReader["NotesDescription"].ToString(),
-                   CreatedDate = Convert.ToDateTime(dataReader["CreatedDate"]),
-                   ModifiedDate = Convert.ToDateTime(dataReader["ModifiedDate"]),
-                   color = dataReader["color"].ToString(),
-                   Reminder = Convert.ToDateTime(dataReader["Reminder"]),
-                   Image = dataReader["Image"].ToString(),
-                   Trash = Convert.ToBoolean(dataReader["Trash"]),
-                   Archive = Convert.ToBoolean(dataReader["Archive"]),
-                   Pin = Convert.ToBoolean(dataReader["Pin"])
-                };
-                list.Add(notesModel);
-            }
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SpGetNotes", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+                sqlCommand.Parameters.AddWithValue("@UserId", userId);
+                SqlDataReader reader = sqlCommand.ExecuteReader();
 
-            //// Here the Linq querey return the Record match in Database
-
-            //  int count = list.Count();
-            // int CurrentPage = pageNumber;
-            // int PageSize = NotePerPage;
-            // int TotalCount = count;
-
-            // Calculating Totalpage by Dividing (No of Records / Pagesize)  
-            // int TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
-            // var items = list.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
-
-            //  var paginationMetadata = new
-            //  {
-            //      totalCount = TotalCount,
-            //     pageSize = PageSize,
-            //     currentPage = CurrentPage,
-            //   totalPages = TotalPages,   
-            // };
-
-            // return items.ToList();
-            return list;
-        }
-
-        /// <summary>
-        /// Update Notes
-        /// </summary>
-        /// <param name="model">model</param>
-        /// <param name="Noteid">id</param>
-        /// <returns>result</returns>
-        public async Task<bool> UpdateNotes(NotesModel model, int Noteid)
-        {
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SpGetNotes", con);
-            con.Open();
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            SqlDataReader dataReader = sqlCommand.ExecuteReader();
-
-            while(dataReader.Read())
-            {
-                NotesModel notesModel = new NotesModel()
+                while (reader.Read())
                 {
-
-                };
+                    NotesModel userList = new NotesModel();
+                    userList.Id = Convert.ToInt32(reader["Id"]);
+                    userList.UserId = (int)reader["UserId"];
+                    userList.Image = reader["Image"].ToString();
+                    userList.Archive = (bool)reader["Archive"];
+                    userList.Pin = Convert.ToBoolean(reader["Pin"].ToString());
+                    userList.Trash = Convert.ToBoolean(reader["Trash"].ToString());
+                    userList.ModifiedDate = Convert.ToDateTime(reader["ModifiedDate"].ToString());
+                    userList.CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString());
+                    userList.color = reader["Color"].ToString();
+                    userList.NotesDescription = reader["NotesDescription"].ToString();
+                    userList.Reminder = Convert.ToDateTime(reader["Reminder"].ToString());
+                    userList.NotesTitle = reader["NotesTitle"].ToString();
+                    notesModel.Add(userList);
+                }
             }
-
-            ////if notes data have records then it will update the records
-            //foreach (var updateNote in query)
-            //{
-
-            //    updateNote.NotesTitle = model.NotesTitle;
-            //    updateNote.NotesDescription = model.NotesDescription;
-            //    updateNote.color = model.color;
-            //}
-            ////save changes to the database
-            var result = await this._authenticationContext.SaveChangesAsync();
-
-            if (result > 0)
+            catch (Exception e)
             {
-                return true;
+                throw new Exception(e.Message.ToString());
+            }
+            if (notesModel != null)
+            {
+                return notesModel;
             }
             else
             {
-                return false;
+                return notesModel;
             }
+
+        }
+
+        public async Task<bool> UpdateNotes(NotesModel model, int noteId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPUpdateNote", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Id", noteId);
+                sqlCommand.Parameters.AddWithValue("@UserId", model.UserId);
+                sqlCommand.Parameters.AddWithValue("@Description", model.NotesDescription);
+                sqlCommand.Parameters.AddWithValue("@Color", model.color);
+
+                sqlCommand.Parameters.AddWithValue("@IsArchive", model.Archive);
+                sqlCommand.Parameters.AddWithValue("@IsPin", model.Pin);
+                sqlCommand.Parameters.AddWithValue("@IsTrash", model.Trash);
+                sqlCommand.Parameters.AddWithValue("@Image", model.Image);
+                /// sqlCommand.Parameters.AddWithValue("@Reminder", model.Reminder);
+                sqlCommand.Parameters.AddWithValue("@Title", model.NotesTitle);
+
+                sqlConnection.Open();
+                var respone = await sqlCommand.ExecuteNonQueryAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -250,26 +230,59 @@ namespace RepositoryLayer.Services
         /// Archives the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns>id</returns>
-        public async Task<bool> Archive(int id)
-        {     
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SpArchive", con);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("@Id", id);
-           // sqlCommand.Parameters.AddWithValue("@Archive", archiveNote);
-            con.Open();
-            var result = await sqlCommand.ExecuteNonQueryAsync();
+        /// <returns></returns>
+        public async Task<bool> Archive(int id, int UserId)
+        {
 
-            if(result > 0)
+            SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCommand = new SqlCommand("NoteId", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+            sqlCommand.Parameters.AddWithValue("@Id", id);
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+            NotesModel userList = new NotesModel();
+            while (reader.Read())
             {
+                ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+                userList.UserId = (int)(reader["UserId"]);
+                userList.Id = Convert.ToInt32(reader["Id"]);
+                userList.Archive = Convert.ToBoolean(reader["Archive"].ToString());
+            }
+            sqlConnection.Close();
+            /// SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCmd = new SqlCommand("SpArchive", sqlConnection);
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+
+
+            ////if notes data have records then it will update the records
+            if (id != 0)
+            {
+
+                if (userList.Archive == false)
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@UserId", UserId);
+                    sqlCmd.Parameters.AddWithValue("@Archive", true);
+                }
+                else
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@UserId", UserId);
+                    sqlCmd.Parameters.AddWithValue("@Archive", false);
+                }
+                await sqlCmd.ExecuteNonQueryAsync();
                 return true;
             }
             else
             {
                 return false;
-            } 
+            }
+
         }
+
 
         /// <summary>
         /// Un archive.
@@ -301,76 +314,139 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>id</returns>
-        public async Task<bool> Trash(int id)
+        public async Task<bool> Trash(int id,int UserId)
         {
-            //// Linq Query to select note id to Trash the note
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SPTrash", con);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("@Id", id);
-            // sqlCommand.Parameters.AddWithValue("@Archive", archiveNote);
-            con.Open();
-            var result = await sqlCommand.ExecuteNonQueryAsync();
 
-            if (result > 0)
+            SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCommand = new SqlCommand("NoteId", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+            sqlCommand.Parameters.AddWithValue("@Id", id);
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+            NotesModel userList = new NotesModel();
+            while (reader.Read())
             {
+                ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+                userList.UserId = (int)(reader["UserId"]);
+                userList.Id = Convert.ToInt32(reader["Id"]);
+                userList.Trash = Convert.ToBoolean(reader["Trash"].ToString());
+            }
+            sqlConnection.Close();
+            /// SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCmd = new SqlCommand("SpTrash", sqlConnection);
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+
+
+            ////if notes data have records then it will update the records
+            if (id != 0)
+            {
+
+                if (userList.Trash == false)
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@Trash", true);
+                    sqlCmd.Parameters.AddWithValue("@UserId", UserId);
+                }
+                else
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@Trash", false);
+                    sqlCmd.Parameters.AddWithValue("@UserId", UserId);
+                }
+                await sqlCmd.ExecuteNonQueryAsync();
                 return true;
             }
             else
             {
                 return false;
             }
+
         }
 
-        /// <summary>
-        /// Un trash.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>id</returns>
-        public async Task<bool> UnTrash(int id)
-        {
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SPUnTrash", con);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("@Id", id);
-            // sqlCommand.Parameters.AddWithValue("@Archive", archiveNote);
-            con.Open();
-            var result = await sqlCommand.ExecuteNonQueryAsync();
 
-            if (result > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+           /// <summary>
+           /// Un trash.
+           /// </summary>
+           /// <param name="id">The identifier.</param>
+           /// <returns>id</returns>
+           public async Task<bool> UnTrash(int id)
+           {
+               SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+               SqlCommand sqlCommand = new SqlCommand("SPUnTrash", con);
+               sqlCommand.CommandType = CommandType.StoredProcedure;
+               sqlCommand.Parameters.AddWithValue("@Id", id);
+               // sqlCommand.Parameters.AddWithValue("@Archive", archiveNote);
+               con.Open();
+               var result = await sqlCommand.ExecuteNonQueryAsync();
+
+               if (result > 0)
+               {
+                   return true;
+               }
+               else
+               {
+                   return false;
+               }
+           }  
 
         /// <summary>
         /// Pins the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns>id</returns>
+        /// <returns></returns>
         public async Task<bool> Pin(int id)
         {
-            SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-            SqlCommand sqlCommand = new SqlCommand("SPPin", con);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.Parameters.AddWithValue("@Id", id);
-            // sqlCommand.Parameters.AddWithValue("@Archive", archiveNote);
-            con.Open();
-            var result = await sqlCommand.ExecuteNonQueryAsync();
 
-            if (result > 0)
+            SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCommand = new SqlCommand("NoteId", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+            sqlCommand.Parameters.AddWithValue("@Id", id);
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+            NotesModel userList = new NotesModel();
+            while (reader.Read())
             {
+                ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+
+                userList.Id = Convert.ToInt32(reader["Id"]);
+                userList.Pin = Convert.ToBoolean(reader["Pin"].ToString());
+            }
+            sqlConnection.Close();
+            /// SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+            SqlCommand sqlCmd = new SqlCommand("SpPin", sqlConnection);
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlConnection.Open();
+
+
+            ////if notes data have records then it will update the records
+            if (id != 0)
+            {
+
+                if (userList.Pin == false)
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@Pin", true);
+                }
+                else
+                {
+                    // userList.IsTrash = true;
+                    sqlCmd.Parameters.AddWithValue("@Id", id);
+                    sqlCmd.Parameters.AddWithValue("@Pin", false);
+                }
+                await sqlCmd.ExecuteNonQueryAsync();
                 return true;
             }
             else
             {
                 return false;
             }
+
         }
+
 
         /// <summary>
         /// Un pin.
@@ -403,14 +479,16 @@ namespace RepositoryLayer.Services
         /// <param name="id">The identifier.</param>
         /// <param name="time">The time.</param>
         /// <returns>id</returns>
-        public async Task<bool> AddReminder(int id, DateTime time)
+        public async Task<bool> AddReminder(int id, NotesModel time, int UserId)
         {
            // FireBaseNotification fireBaseNotification = new FireBaseNotification();
             SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
             SqlCommand sqlCommand = new SqlCommand("SPReminder", con);
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.Parameters.AddWithValue("@Id", id);
-            sqlCommand.Parameters.AddWithValue("@Reminder", time);
+            sqlCommand.Parameters.AddWithValue("@UserId", UserId);
+            sqlCommand.Parameters.AddWithValue("@Reminder", time.Reminder);
+
             con.Open();
             var result = await sqlCommand.ExecuteNonQueryAsync();
             //fireBaseNotification.Notification(Reminder);
@@ -457,20 +535,42 @@ namespace RepositoryLayer.Services
         /// <param name="Noteid">The noteid.</param>
         /// <param name="UserId">The user identifier.</param>
         /// <returns>list of user id</returns>
-        public async Task<bool> Collabrate(int Noteid, IList<string> UserId,int CurrentUser)
+        public async Task<bool> Collabrate(int Noteid, IList<string> email,int CurrentUser)
         {
             try
             {
                 SqlConnection con = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
-                
-                foreach(var user in UserId)
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+
+                List<int> ids = new List<int>();
+                foreach (var user in email)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("GetAllEmails", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    sqlCommand.Parameters.AddWithValue("@email", user);
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        NotesModel userList = new NotesModel();
+                        ////userList.Id = Convert.ToInt32(sdreader["Id"]);
+
+                        userList.UserId = Convert.ToInt32( reader["Id"]);
+                        ids.Add(userList.UserId);
+                    }
+                    sqlConnection.Close();
+
+                }
+
+                foreach (var users in ids)
                 {
                    SqlCommand sqlCommand = new SqlCommand("SPCollabration", con);
                     sqlCommand.CommandType = CommandType.StoredProcedure;
                     con.Open();
                     sqlCommand.Parameters.AddWithValue("@Id", Noteid);
                     sqlCommand.Parameters.AddWithValue("@UserId", CurrentUser);
-                    sqlCommand.Parameters.AddWithValue("@ReciverId", user);
+                    sqlCommand.Parameters.AddWithValue("@ReciverId", users);
                     await sqlCommand.ExecuteNonQueryAsync();
                     con.Close();
                 }
@@ -542,6 +642,137 @@ namespace RepositoryLayer.Services
             catch (Exception e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the archive notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public IList<NotesModel> GetArchiveNotes(int userId)
+        {
+            IList<NotesModel> notesModel = new List<NotesModel>();
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPGetArchiveNotes", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+                sqlCommand.Parameters.AddWithValue("@UserId", userId);
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    NotesModel userList = new NotesModel();
+                    userList.Id = Convert.ToInt32(reader["Id"]);
+                    userList.UserId = (int)reader["UserId"];
+                    userList.Image = reader["Image"].ToString();
+                    userList.Archive = (bool)reader["Archive"];
+                    userList.Pin = Convert.ToBoolean(reader["Pin"].ToString());
+                    userList.Trash = Convert.ToBoolean(reader["Trash"].ToString());
+                    userList.ModifiedDate = Convert.ToDateTime(reader["ModifiedDate"].ToString());
+                    userList.CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString());
+                    userList.color = reader["Color"].ToString();
+                    userList.NotesDescription = reader["NotesDescription"].ToString();
+                    userList.Reminder = Convert.ToDateTime(reader["Reminder"].ToString());
+                    userList.NotesTitle = reader["NotesTitle"].ToString();
+                    notesModel.Add(userList);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message.ToString());
+            }
+            if (notesModel != null)
+            {
+                return notesModel;
+            }
+            else
+            {
+                return notesModel;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the trash notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public IList<NotesModel> GetTrashNotes(int userId)
+        {
+            IList<NotesModel> notesModel = new List<NotesModel>();
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPGetTrashNotes", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+                sqlCommand.Parameters.AddWithValue("@UserId", userId);
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    NotesModel userList = new NotesModel();
+                    userList.Id = Convert.ToInt32(reader["Id"]);
+                    userList.UserId = (int)reader["UserId"];
+                    userList.Image = reader["Image"].ToString();
+                    userList.Archive = (bool)reader["Archive"];
+                    userList.Pin = Convert.ToBoolean(reader["Pin"].ToString());
+                    userList.Trash = Convert.ToBoolean(reader["Trash"].ToString());
+                    userList.ModifiedDate = Convert.ToDateTime(reader["ModifiedDate"].ToString());
+                    userList.CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString());
+                    userList.color = reader["Color"].ToString();
+                    userList.NotesDescription = reader["NotesDescription"].ToString();
+                    userList.Reminder = Convert.ToDateTime(reader["Reminder"].ToString());
+                    userList.NotesTitle = reader["NotesTitle"].ToString();
+                    notesModel.Add(userList);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message.ToString());
+            }
+            if (notesModel != null)
+            {
+                return notesModel;
+            }
+            else
+            {
+                return notesModel;
+            }
+
+        }
+
+        public bool ColorService(ColorModel data)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(_configuration["ConnectionStrings:connectionDb"]);
+                SqlCommand sqlCommand = new SqlCommand("SPChangeColor", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Id", data.noteId);
+                sqlCommand.Parameters.AddWithValue("@UserId", data.UserId);
+
+                sqlCommand.Parameters.AddWithValue("@color", data.color);
+
+
+                sqlConnection.Open();
+                var response = sqlCommand.ExecuteNonQuery();
+               
+                if (response != 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
 
         }

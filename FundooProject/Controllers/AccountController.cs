@@ -8,6 +8,9 @@ namespace FundooProject.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
     using System.Threading.Tasks;
     using BusinessLayer.Interface;
     using CommanLayer.Model;
@@ -15,12 +18,14 @@ namespace FundooProject.Controllers
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
 
     /// <summary>
     /// Account Controller
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase"/>
-     [EnableCors("CorsPolicy")]
+    [EnableCors("CorsPolicy")]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -33,13 +38,16 @@ namespace FundooProject.Controllers
         /// </summary>
         private IUserRegistrationBusiness _account;
 
+        private IConfiguration _configuration;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
         /// <param name="account">The account.</param>
-        public AccountController(IUserRegistrationBusiness account)
+        public AccountController(IUserRegistrationBusiness account, IConfiguration configuration)
         {
             this._account = account;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -53,9 +61,26 @@ namespace FundooProject.Controllers
         //[EnableCors("CorsPolicy")]
         public async Task<IActionResult> AddUserDetail(UserDetails details)
         {
-            //// the variable result stores the result of method AddUserDetails          
-            var result = await _account.AddUserDetails(details);
-            return this.Ok(new { result });
+            try
+            {
+                //// the variable result stores the result of method AddUserDetails          
+                UserDetails model = await _account.AddUserDetails(details);
+                if (model != null)
+                {
+                    var firstName = model.FirstName;
+                    var lastName = model.LastName;
+                    return Ok(new { success = true, message = "User Registration successful", data= (model) });
+                }
+                else
+                {
+                    return Ok(new { success = false, message = "Registration failed" });
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+           
         }
 
         /// <summary>
@@ -67,12 +92,33 @@ namespace FundooProject.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
-        public async Task<Tuple<string, string>> Login(LoginModel details)
+        public async Task<IActionResult> Login(LoginModel login)
         {
-            //// the variable result stores the result of method Login
-            var ResultOfLogin = await this._account.Login(details);
-            return Tuple.Create(ResultOfLogin.Item1, "Login Successful");
+            try
+            {
+                UserDetails model = await _account.Login(login);
+
+                if (model != null)
+                {
+                  var token=  TokenGeneration(model);
+                    var email = login.Email;
+                    var password = login.Password;
+                    return Ok(new { success = true, message = "Success",  token, model });
+                }
+                else
+                {
+                    var success = false;
+                    var message = "Login failed";
+                    return BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                throw exception;
+            }
+            
         }
+
 
         /// <summary>
         /// Forgot the password.
@@ -82,10 +128,11 @@ namespace FundooProject.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("ForgotPassword")]
-        public async Task<string> ForgotPasword(ForgotPasswordModel passwordModel)
+        public async Task<IActionResult> ForgotPasword(ForgotPasswordModel passwordModel)
         {
-            //// the variable result stores the result of method Login
-            return await this._account.ForgotPassword(passwordModel);
+           //// the variable result stores the result of method Login
+            var result= await this._account.ForgotPassword(passwordModel);
+            return Ok(new { success = true, message = "Link sent to your mail id", data = (passwordModel) });
         }
 
         /// <summary>
@@ -100,7 +147,7 @@ namespace FundooProject.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             var result = await this._account.ResetPassword(resetPasswordModel);
-            return this.Ok(new { result });
+            return this.Ok(new { success= true, message= "Password change successfully", data=(result) });
         }
 
         /// <summary>
@@ -168,6 +215,33 @@ namespace FundooProject.Controllers
         public IList<UserDetails> ListOfUsers()
         {
            return this._account.ListOfUsers();        
+        }
+
+
+        [HttpGet]
+        public string TokenGeneration(UserDetails model)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+            //// here using securitykey and algorithm(security) the creadintails is generate(SigningCredentials present in Token)
+            var creadintials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[] {
+               new Claim("Email",model.Email),
+               new Claim("Id", (model.id).ToString()),
+               new Claim("FirstName", model.FirstName),
+               new Claim("LastName", model.LastName),
+               new Claim("UserName", model.UserName),
+                new Claim("ProfoilePicture", model.ProfilePicture)
+                };
+
+            var token = new JwtSecurityToken("Security token", "https://Test.com",
+                claims,
+                DateTime.UtcNow,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creadintials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
         }
     }
 }

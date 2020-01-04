@@ -29,7 +29,7 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="UserId">The user identifier.</param>
         /// <returns></returns>
-        IList<NotesModel> GetNotes(int userId, int pageNumber, int NotePerPage );
+        IList<NotesModel> GetNotes(int userId );
 
         /// <summary>
         /// Updates the notes.
@@ -62,7 +62,7 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>id</returns>
-        Task<bool> Archive(int id);
+        Task<bool> Archive(int id,int UserId);
 
         /// <summary>
         /// Uns the archive.
@@ -76,7 +76,7 @@ namespace RepositoryLayer.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>id</returns>
-        Task<bool> Trash(int id);
+        Task<bool> Trash(int id, int UserId);
 
         /// <summary>
         /// Un trash.
@@ -105,7 +105,7 @@ namespace RepositoryLayer.Interface
         /// <param name="id">The identifier.</param>
         /// <param name="time">The time.</param>
         /// <returns>id</returns>
-        Task<bool> AddReminder(int id, DateTime time);
+        Task<bool> AddReminder(int id, NotesModel time, int UserId);
 
         /// <summary>
         /// Delete reminder.
@@ -129,6 +129,28 @@ namespace RepositoryLayer.Interface
         /// <returns>id</returns>
         Task<bool> BulkTrash(IList<int> id);
 
+        /// <summary>
+        /// Searches the specified word.
+        /// </summary>
+        /// <param name="word">The word.</param>
+        /// <param name="UserId">The user identifier.</param>
+        /// <returns></returns>
         IList<NotesModel> Search(string word, int UserId);
+
+        /// <summary>
+        /// Gets the archive notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        IList<NotesModel> GetArchiveNotes(int userId);
+
+        /// <summary>
+        /// Gets the trash notes.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        IList<NotesModel> GetTrashNotes(int userId);
+
+        bool ColorService(ColorModel data);
     }
 }
