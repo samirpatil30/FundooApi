@@ -105,14 +105,14 @@ export default class AxiosService  {
        return axios.post("https://localhost:44313/api/Notes/"+DatetimeData.Id+"/Reminder", DatetimeData,header);
     }
   
-  AddLabelWithoutNoteService(data)
-  {
+   AddLabelWithoutNoteService(data)
+   {
         var JwtToken = localStorage.getItem('Token');
         var header={headers:{Authorization: `bearer ${JwtToken}`}};   
 
         // console.log('Label in axios', data.EditLabel)
       return axios.post("https:/localhost:44313/api/Label/"+data.EditLabel+"/Add", null, header);
-  }
+   }
 
     GetLabelService()
     {
@@ -126,7 +126,7 @@ export default class AxiosService  {
         var JwtToken = localStorage.getItem('Token')
         var header={headers:{Authorization: `bearer ${JwtToken}`}};   
 
-        return axios.delete(`https://localhost:44313/api/Label/${id}`)
+        return axios.delete("https://localhost:44313/api/Label/"+id, null, header)
     }
 
     UpdateNoteService(data)
@@ -134,6 +134,14 @@ export default class AxiosService  {
         console.log("This is update note axios", data);
          var JwtToken = localStorage.getItem('Token')
          var header={headers:{Authorization: `bearer ${JwtToken}`}};   
-        return axios.put("https://localhost:44313/api/Notes/")
+        return axios.post("https://localhost:44313/api/Notes/"+data.noteId, data, header)
+    }
+
+    ImageUploadService(image,noteId)
+    {
+         console.log("This is Image data axios", image);
+         var JwtToken = localStorage.getItem('Token')
+         var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+        return axios.post("https://localhost:44313/api/Notes/"+noteId+"/Image", image, header)
     }
 }

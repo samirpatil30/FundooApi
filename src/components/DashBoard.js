@@ -43,7 +43,8 @@ export default class DashBoard extends Component {
             left: false,
             notesInDashBoard:[],
             editlabel:false,
-            createlabel:''
+            createlabel:'',
+            searchword:''
         }
 
         this.onchangeTextField=this.onchangeTextField.bind(this)
@@ -85,6 +86,13 @@ handleClose = () => {
         })     
     }
 
+    Searchtext= event =>
+    {
+        this.setState({
+                searchword: event.target.value
+        })
+    }
+
 onchangeTextField(e)
 {
   this.setState({[e.target.name]: e.target.value});
@@ -93,7 +101,7 @@ onchangeTextField(e)
 
 
     render() {
-                console.log('in dashboard render', this.props.notesInDashBoard);
+                console.log('in dashboard searchWord', this.state.searchword);
                  console.log('this is GetNote()', this.state.getAllNotes);
                 
        const sideList =
@@ -177,7 +185,7 @@ onchangeTextField(e)
                         </Typography>
 
                         <SearchIcon id="search-icon" />
-                        <InputBase placeholder="Search…" className="Search" inputProps={{ 'aria-label': 'search' }} />
+                        <InputBase placeholder="Search…" className="Search" onChange={this.Searchtext} inputProps={{ 'aria-label': 'search' }} />
 
                         <div className="RefreshAndSettingIcon">
                             <IconButton color="black" className="left-icon-setting">
@@ -209,7 +217,7 @@ onchangeTextField(e)
 
                 </div>
                  <div>
-                        <DisplayNotes notes={this.state.notesInDashBoard} />         
+                        <DisplayNotes notes={this.state.notesInDashBoard} searchWord={this.state.searchword} />         
 
                  </div>   
                 

@@ -30,6 +30,8 @@ import ArchiveComponent from "./ArchiveComponent";
 import NewReminder from "./NewReminder";
 import AxiosService from "../service/postData";
 import UpdateDialog from './UpdateDialog'
+import Image from "./Image";
+
 const theme = createMuiTheme({
   overrides: {
     MuiBackdrop: {
@@ -41,6 +43,9 @@ const theme = createMuiTheme({
 });
 
 var axiosObject = new AxiosService();
+
+
+
 export default class DisplayNotes extends React.Component {
   constructor(props) {
     super(props);
@@ -57,7 +62,6 @@ export default class DisplayNotes extends React.Component {
 
   handleChange = e => {
     console.log('this is handlechange', e.target.value);
-    
 
     this.setState({ [e.target.name]: e.target.value });
     
@@ -81,6 +85,10 @@ export default class DisplayNotes extends React.Component {
     this.props.getMethod();
   };
 
+   handleArchiveNotes = () => {
+    this.props.GetArchiveMethod();
+  };
+
   UpdateNote = () => {
     this.setState({
       showUpdateNotesCard: false
@@ -100,13 +108,12 @@ export default class DisplayNotes extends React.Component {
   }
 
   render() {
-    console.log(" IDDDDDDDDDDD", this.state.noteId);
- 
+    console.log(" IDDDDDDDDDDD", this.props.searchWord);
 
-    var printNoteList = this.props.notes.map((item, index) => {
+    var printNoteList = this.props.notes .map((item, index) => {
       return (
         <div id="Small-NotesCardInner">
-          <Card id="CardIdAllNotes" style={{ backgroundColor: item.color }}>
+          <Card key={item.noteid} id="CardIdAllNotes" style={{ backgroundColor: item.color }}>
 
             <div className="Image">
                  {/* <Avatar  alt={name} src="C:/Users/User/Fundootimepass/src/components/A.jpg"/> */}
@@ -142,7 +149,8 @@ export default class DisplayNotes extends React.Component {
               <div className="Small-closeButton">
                 <NewReminder noteid={item.id} />
                 <NewCollabrator idItem={item.id} />
-                <ArchiveComponent noteid={item} getNoteMethod={this.handleSave}/>
+                <ArchiveComponent noteid={item} getNoteMethod={this.handleSave} getArchiveNotes={this.handleArchiveNotes} />
+                <Image noteId={item.id}/>
                 <ColorComponent
                   noteId={item.id}
                   ReturnColor={item.color}
@@ -168,6 +176,7 @@ export default class DisplayNotes extends React.Component {
           userId= {this.state.userId}
           color= {this.state.color}
           NoteImage= {this.state.NoteImage}
+          GetMethod= {this.handleSave}
           />
           </div>
         : null

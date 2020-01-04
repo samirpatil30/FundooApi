@@ -11,7 +11,11 @@ import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import '../css/Reminder.css'
 import AxiosService from "../service/postData";
 
-
+function titleDesSearch(searchWord) {
+    return function (x) {
+        return x.title.includes(SearchText) || x.description.includes(SearchText)
+    }
+}
 var axiosObject = new AxiosService;
 export default class NewReminder extends React.Component {
     state = {

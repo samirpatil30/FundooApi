@@ -49,7 +49,7 @@ export default class EditLabel extends Component {
             })
     }
 
-    DeleteLabelData()
+    DeleteLabelData=() =>
     {
           axiosObject.DeleteLabelService(this.props.labelId).then(response=>{
               console.log(" response in ",response);
@@ -75,7 +75,7 @@ export default class EditLabel extends Component {
 
     }
  
-
+   
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
@@ -86,7 +86,7 @@ export default class EditLabel extends Component {
         return (
             <div>
              <IconButton size="small" onClick={this.DeleteLabelData}>
-            <DeleteIcon fontSize="inherit" id="DeleteIcon" />
+            <DeleteIcon fontSize="inherit" id="DeleteIcon" onClick={this.DeleteLabel} />
            </IconButton>
                 <TextField
                     id="standard-name"

@@ -52,8 +52,8 @@ export default class UpdateDialog extends Component {
     })
     var data = {
                  
-      title: this.state.title,                             
-      description : this.state.description,
+      NotesTitle: this.state.title,                             
+      NotesDescription : this.state.description,
       noteId:this.state.noteId,
       color:this.state.color,
       NoteImage: this.state.NoteImage
@@ -61,8 +61,8 @@ export default class UpdateDialog extends Component {
     }
 
     updatenote.UpdateNoteService(data).then(response=>{
-        console.log(" response in ",response);
-      
+        console.log("Update Notesss response in ",response);
+          this.props.GetMethod();
       })
   }
 render(){

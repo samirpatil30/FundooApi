@@ -47,7 +47,7 @@ export default class GetArchiveNotes extends Component {
                 </div> */}
 
         <div>
-          <DisplayNotes notes={this.state.ArchiveNotes}></DisplayNotes>
+          <DisplayNotes notes={this.state.ArchiveNotes} GetArchiveMethod={this.getArchiveNotes}></DisplayNotes>
           {/* <DashBoard notesInDashBoard={this.state.getAllNotes} />          */}
         </div>
       </div>

@@ -19,13 +19,12 @@ ArchiveNotes=()=> {
               axiosObject.ArchiveNotesService(id).then(response=>{
                  console.log(" response in ",response);
                        this.props.getNoteMethod()
+                       this.props.getArchiveNotes()
                   })
 
             .catch(error => {
             console.log('def',error.response)
             });
-
-
     }
 
 
