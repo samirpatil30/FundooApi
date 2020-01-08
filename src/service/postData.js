@@ -144,4 +144,14 @@ export default class AxiosService  {
          var header={headers:{Authorization: `bearer ${JwtToken}`}};   
         return axios.post("https://localhost:44313/api/Notes/"+noteId+"/Image", image, header)
     }
+
+    GetAllSearchNotes(searchData)
+    {
+         var JwtToken = localStorage.getItem('Token')
+         var header={headers:{Authorization: `bearer ${JwtToken}`}};   
+         console.log('searchword in axios', searchData);
+         
+
+         return axios.get("https:/localhost:44313/api/Notes/"+searchData+"/search", {headers:{Authorization: `bearer ${JwtToken}`}})         
+    }
 }

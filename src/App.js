@@ -14,7 +14,8 @@ import NoteCard from './components/NoteCard'
 import GetArchiveNotes from './components/GetArchiveNotes'
 import GetTrashNotes from './components/GetTrashNotes'
 import NewReminder from './components/NewReminder'
- import Image from './components/Image'
+import Image from './components/Image'
+import GetAllSearchNotes from './components/GetAllSearchNotes'
 
 class App extends Component {
 
@@ -37,7 +38,7 @@ class App extends Component {
                  <Route  path= "/Dashboard/ArchiveNotes" component={ GetArchiveNotes} />
                  <Route  path= "/Dashboard/TrashNotes" component={ GetTrashNotes} />
                 <Route  path= "/Mynotes" component={ Image } />
-                 {/* <Route  path= "/reminder" component={ AddCollabrator} /> */}
+                 <Route  path= "/Dashboard/reminder" component={ GetAllSearchNotes} /> 
 
         
       </div>

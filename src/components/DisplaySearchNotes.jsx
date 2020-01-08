@@ -48,7 +48,7 @@ var axiosObject = new AxiosService();
 
 
 
-export default class DisplayNotes extends React.Component {
+export default class DisplaySearchNotes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,25 +109,22 @@ export default class DisplayNotes extends React.Component {
     axiosObject.UpdateNoteService(data);
   };
 
-  componentDidMount() {
+  componentMount=() => {
     this.props.getMethod;
   }
 
   render() {
-    console.log(" IDDDDDDDDDDD", this.props.searchWord);
+    console.log(" IDDD");
 
-    var printNoteList = this.props.notes .map((item, index) => {
+    var printNoteList = this.props.Searchnotes.map((item, index) => {
       return (
         <div id="Small-NotesCardInner">
+          {/* {
+              this.props.
+
+          } */}
           <Card key={item.noteid} id="CardIdAllNotes" style={{ backgroundColor: item.color }}>
 
-            <div className="Image">
-                 {/* <Avatar  alt={name} src="C:/Users/User/Fundootimepass/src/components/A.jpg"/> */}
-                 {
-                   item.image !== null  && item.image!== ""? <img  src= {item.image}  alt="Noimage"/> : null
-                 }
-                   
-            </div>
             <div>
               <div
                 className="Small-NotesTitleAndDesc"
@@ -146,20 +143,19 @@ export default class DisplayNotes extends React.Component {
                   style={{ backgroundColor: item.color }}
                   id="DescriptionId"
                   name="notesDescription"
-                  value={item.notesDescription}
-                  placeholder="Description"
-                />
+                   value={item.notesDescription}
+                  placeholder="Description" />
                
               </div>
 
               <div className="Small-closeButton">
                {
-                  item.trash === true ? <UntrashNotes noteid={item} getTrashNotes={this.handleTrashNotes} /> : 
+                  item.trash === true ? <UntrashNotes noteid={item} /> : 
 
                   <div className="Small-closeButton">
                   <NewReminder noteid={item.id} /> 
                 <NewCollabrator idItem={item.id} />
-                <ArchiveComponent noteid={item} getNoteMethod={this.handleSave} getArchiveNotes={this.handleArchiveNotes} />
+                <ArchiveComponent noteid={item} getNoteMethod={this.handleSave} />
                 <Image noteId={item.id}/>
                 <ColorComponent
                   noteId={item.id}
@@ -178,7 +174,7 @@ export default class DisplayNotes extends React.Component {
     });
  
 
-    return <div className="Small-CardDiv">{printNoteList}
+    return <div className="Small-CardDiv">  {printNoteList}
      {
        this.state.showUpdateNotesCard === true ?
        <div>
@@ -193,6 +189,7 @@ export default class DisplayNotes extends React.Component {
           </div>
         : null
      }
+    
     
     </div>;
   }

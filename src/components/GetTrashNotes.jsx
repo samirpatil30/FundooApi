@@ -47,7 +47,7 @@ render()
             <div  className={this.state.open?null:"notes-top-create"}>
 
                 <div>
-                    <DisplayNotes notes={this.state.TrashNotes}></DisplayNotes>    
+                    <DisplayNotes notes={this.state.TrashNotes} getAllTrashNotes={ this.getTrashNotes}></DisplayNotes>    
                     {/* <DashBoard notesInDashBoard={this.state.getAllNotes} />          */}
                 </div>
             </div>

@@ -31,7 +31,8 @@ import { TextField } from '@material-ui/core';
 import Labeldata from './Label'
 import EditLabel from './EditLabel'
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
-
+// import GetAllSearchNotes from './GetAllSearchNotes'
+import DisplaySearchNotes from "./DisplaySearchNotes";
 
 var axiosObject = new AxiosService;
 export default class DashBoard extends Component {
@@ -44,7 +45,9 @@ export default class DashBoard extends Component {
             notesInDashBoard:[],
             editlabel:false,
             createlabel:'',
-            searchword:''
+            searchword:'',
+            SearchNotes:[]
+             
         }
 
         this.onchangeTextField=this.onchangeTextField.bind(this)
@@ -60,6 +63,12 @@ export default class DashBoard extends Component {
 handleClose = () => {
   this.setState({ editlabel: false })
 };
+
+    jumptoSearch =() =>
+    {
+          this.props.history.push('/Dashboard') 
+    }
+
     get=() =>
     {
         this.props.history.push('/Dashboard/notes') 
@@ -88,9 +97,31 @@ handleClose = () => {
 
     Searchtext= event =>
     {
-        this.setState({
-                searchword: event.target.value
-        })
+       
+              var  searchword= event.target.value
+        
+
+         axiosObject.GetAllSearchNotes(searchword).then(response => {
+                        console.log('Searchhhhh response',response);
+                        let array = [];
+                        response.data.map((data) => {
+                        array.push(data);
+                });
+            this.setState({
+                SearchNotes: array
+            })
+            
+        });
+        console.log('searchh notes array ',this.state.SearchNotes);
+    }
+
+
+      getSearchNotes() {
+          
+          var SearchWord= this.props.searchWord;
+        
+
+       
     }
 
 onchangeTextField(e)
@@ -101,8 +132,8 @@ onchangeTextField(e)
 
 
     render() {
-                console.log('in dashboard searchWord', this.state.searchword);
-                 console.log('this is GetNote()', this.state.getAllNotes);
+               
+              
                 
        const sideList =
       (
@@ -185,7 +216,7 @@ onchangeTextField(e)
                         </Typography>
 
                         <SearchIcon id="search-icon" />
-                        <InputBase placeholder="Search…" className="Search" onChange={this.Searchtext} inputProps={{ 'aria-label': 'search' }} />
+                        <InputBase placeholder="Search…" className="Search" onChange={this.Searchtext} onClick={this.jumptoSearch} inputProps={{ 'aria-label': 'search' }} />
 
                         <div className="RefreshAndSettingIcon">
                             <IconButton color="black" className="left-icon-setting">
@@ -217,8 +248,10 @@ onchangeTextField(e)
 
                 </div>
                  <div>
-                        <DisplayNotes notes={this.state.notesInDashBoard} searchWord={this.state.searchword} />         
-
+                   <DisplaySearchNotes Searchnotes={this.state.SearchNotes} ></DisplaySearchNotes> 
+                        
+                        <DisplayNotes notes={this.state.notesInDashBoard}  />         
+                         {/* <GetAllSearchNotes searchWord={this.state.searchword} />  */}
                  </div>   
                 
             </div>
